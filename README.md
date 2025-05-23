@@ -9,8 +9,8 @@ Este projeto visa desenvolver um **sistema web capaz de prover CRUDs para client
 # 🔑 **Principais Funcionalidades**
 - Cadastro, alteração e exclusão de dados referentes aos pacientes, funcionários e consultas;
 - Agendamento de consultas;
-- Geração de uma ficha com histórico dos pacientes;
-- Alocação de funcionários para áreas específicas do hospital veterinário.
+- Geração de uma ficha com as informações dos pacientes;
+- Venda de produtos veterinários.
 
 # 💡 Tecnologias Utilizadas
 ## 🖥️ Frontend
