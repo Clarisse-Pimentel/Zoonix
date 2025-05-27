@@ -1,5 +1,5 @@
-# Zoonix
-Este projeto visa desenvolver um **sistema web capaz de prover CRUDs para clientes, animais, veterinários, consultas veterinárias e possíveis outras demandas da empresa**. O sistema possuirá uma interface simples e intuitiva que prioriza a acessibilidade do usuário e possibilita a gestão de atendimentos de pets ou animais de grande porte. Além disso, será possível criar uma ficha com  a rotina do paciente, de modo a viabilizar o acompanhamento do tratamento por seus respectivos donos. Este software possuirá autorização e autenticação para permitir apenas pessoas autorizadas possam realizar o acesso e a alteração dos dados.
+# 🐾 ClinVet+
+Este projeto visa desenvolver um sistema web para clínica veterinária, oferecendo funcionalidades de cadastro, edição, listagem e exclusão (CRUD) de pacientes, tutores, veterinários, atendimentos e usuários autorizados. O sistema contará com uma interface simples e intuitiva, priorizando a acessibilidade do usuário e a organização dos dados clínicos. Será possível registrar atendimentos com diagnóstico e tratamento, vinculados ao paciente e seu responsável, permitindo o acompanhamento da saúde do animal ao longo do tempo. O acesso ao sistema será restrito por meio de login com autenticação, garantindo que apenas usuários autorizados possam visualizar e modificar as informações.
 
 # 👤 **Autores**
 - [Clarisse Lacerda Pimentel](https://github.com/Clarisse-Pimentel)
