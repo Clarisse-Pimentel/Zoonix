@@ -1,0 +1,43 @@
+# Arquivos de registro (logs) - Esses arquivos são criados enquanto o programa roda para registrar o que aconteceu.
+# Eles não precisam ficar no controle de versão, porque mudam o tempo todo e ocupam espaço.
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Pasta node_modules - É onde ficam todas as bibliotecas que o projeto usa.
+# Essa pasta é muito grande e pode ser recriada com os arquivos de configuração, então não colocamos ela no controle de versão.
+node_modules/
+
+# Pastas de construção (build) - São arquivos gerados automaticamente para deixar o projeto pronto para uso.
+# Esses arquivos também não precisam ficar no Git.
+dist/
+build/
+
+# Arquivos temporários do sistema operacional - São arquivos criados pelo Windows ou Mac que não têm nada a ver com o projeto.
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários do editor de texto - São arquivos criados pelo editor enquanto você edita o código.
+*.swp
+*.swo
+*.tmp
+.vscode/
+
+# Arquivos de configuração com informações privadas (variáveis de ambiente) - Esses arquivos guardam dados sensíveis, como senhas ou chaves.
+# Por isso, não devem ser compartilhados no repositório.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Arquivos de banco de dados locais - Caso use um banco de dados guardado em arquivo (como SQLite).
+# Esses arquivos geralmente não devem ficar no repositório.
+*.sqlite
+*.sqlite3
+
+# Pastas temporárias usadas pelo sistema ou pelo projeto para armazenar arquivos temporários.
+tmp/
+temp/
