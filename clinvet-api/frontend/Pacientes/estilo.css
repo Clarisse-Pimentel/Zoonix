@@ -1,0 +1,253 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  flex-direction: row; /* Mantém o layout em linha */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 230px;
+  background-color: #3b4dbc;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 2px solid #8be78c;
+  padding-bottom: 5px;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-x: auto;
+}
+
+/* Header com layout flex para alinhar busca + botão */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinha tudo à esquerda */
+  gap: 1rem; /* Espaçamento entre elementos */
+  margin-bottom: 30px;
+}
+
+/* Título do header */
+header h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 2rem; /* Espaço entre título e busca */
+}
+
+/* Container da barra de busca */
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 2px solid #8be78c;
+  border-radius: 20px;
+  padding: 5px 10px;
+  background-color: white;
+  flex-grow: 1;         /* Faz a busca crescer para ocupar o espaço disponível */
+  max-width: 300px;     /* Limita a largura máxima */
+}
+
+/* Input da busca */
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+  flex-grow: 1;         /* Input ocupa o espaço disponível dentro da barra */
+}
+
+/* Botão da busca */
+.search-bar button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Botão Novo Paciente */
+.novo-paciente {
+  background-color: #3b4dbc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border: 2px solid #8be78c;
+}
+
+thead {
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #8be78c;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 10px;
+  font-size: 14px;
+}
+
+td img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+td button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+/* Ajustes para tablets */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+    padding: 15px;
+  }
+
+  .sidebar h1 {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .sidebar li {
+    font-size: 16px;
+  }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+header h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 2px solid #8be78c;
+  border-radius: 20px;
+  padding: 5px 10px;
+  background-color: white;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+  .novo-paciente {
+    align-self: flex-end;
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+
+  /* Faz a barra de busca ocupar toda largura no modo coluna */
+  .search-bar {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Ajustes para celulares */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+
+  .sidebar h1 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  /* Barra de busca com 100% da largura em celular */
+  .search-bar {
+    width: 100%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
