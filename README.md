@@ -38,6 +38,7 @@ tipo: descrição breve
 
 ---
 
+
 ## ✅ Boas Práticas de Codificação
 
 Todas as pessoas desenvolvedoras do projeto devem seguir as práticas abaixo para garantir um código limpo, organizado e de fácil manutenção:
