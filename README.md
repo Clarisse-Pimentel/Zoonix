@@ -97,7 +97,9 @@ cd Zoonix
 3. Inicie o servidor backend:
 
    ```bash
+   cd backend
    npm start
+   node server.js
    ```
 
 4. Acesse o frontend:
