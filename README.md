@@ -90,3 +90,16 @@ Banco de dados relacional utilizado:
 git clone https://github.com/Clarisse-Pimentel/Zoonix.git
 cd Zoonix
 ```
+2. Configure o banco de dados MySQL:
+   - O banco `clinvet` será criado automaticamente ao iniciar o servidor (usando o script `clinvet.sql`)
+   - Ajuste as credenciais no arquivo `backend/db.js` conforme seu ambiente
+
+3. Inicie o servidor backend:
+
+   ```bash
+   npm start
+   ```
+
+4. Acesse o frontend:
+   - Abra o arquivo `index.html` no navegador
+   - Ou utilize um servidor local como Live Server (VSCode)
