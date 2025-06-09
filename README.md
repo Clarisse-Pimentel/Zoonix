@@ -28,7 +28,6 @@ tipo: descrição breve
 - `chore`: tarefas menores (configs, dependências, ajustes diversos)
 
 ### 🌿 Padrão de Branches
-
 - `main`  
   Branch estável, versão pronta para produção.
 
@@ -36,7 +35,6 @@ tipo: descrição breve
   Branch principal de desenvolvimento, onde as funcionalidades são integradas.
 
 > 📌 Todas as novas funcionalidades e correções são feitas diretamente na branch `dev`.  
-
 
 ---
 
