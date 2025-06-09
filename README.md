@@ -29,36 +29,17 @@ tipo: descrição breve
 
 ### 🌿 Padrão de Branches
 
-- **`main`**  
-  Branch estável, versão pronta para produção.  
-- **`dev`**  
+- `main`  
+  Branch estável, versão pronta para produção.
+
+- `dev`  
   Branch principal de desenvolvimento, onde as funcionalidades são integradas.
-- **`feature/<nome-da-feature>`**  
-  Para desenvolvimento de novas funcionalidades a partir da `dev`.  
-  Exemplo: `feature/cadastro-paciente`
 
-- **`bugfix/<descricao-do-bug>`**  
-  Para correção de bugs a partir da `dev`.  
-  Exemplo: `bugfix/corrigir-login`
+> 📌 Todas as novas funcionalidades e correções são feitas diretamente na branch `dev`.  
 
-### 🔁 Fluxo de Trabalho com Git
-1. Criar branch `feature` ou `bugfix` a partir da `dev`:
-   ```bash
-   git checkout dev
-   git checkout -b feature/nome-da-feature
-   
-2. Fazer commits claros e frequentes.
-
-3. Dar push para o repositório remoto:
-`git push origin feature/nome-da-feature`
-
-4. Abrir Pull Request para a branch `dev`.
-
-5. Após aprovação, fazer merge na `dev`.
-
-6. Periodicamente, a branch `dev` será mesclada na main para atualização da versão estável.
 
 ---
+
 
 ## ✅ Boas Práticas de Codificação
 
