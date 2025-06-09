@@ -1,13 +1,15 @@
-import db from '../db.js';
+import { db } from '../db.js';
 
-export const listarPacientes = (req, res) => {
-  db.query('SELECT * FROM pacientes', (err, results) => {
-    if (err) return res.status(500).send('Erro ao buscar pacientes.');
+export const listarPacientes = async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT * FROM pacientes');
     res.json(results);
-  });
+  } catch (err) {
+    res.status(500).send('Erro ao buscar pacientes.');
+  }
 };
 
-export const cadastrarPaciente = (req, res) => {
+export const cadastrarPaciente = async (req, res) => {
   const { nome, raca, especie, sexo, idade, tutor, telefone_tutor } = req.body;
 
   if (!nome || !especie || !tutor || !sexo) {
@@ -20,13 +22,15 @@ export const cadastrarPaciente = (req, res) => {
   `;
   const values = [nome, raca, especie, sexo, idade, tutor, telefone_tutor];
 
-  db.query(sql, values, (err) => {
-    if (err) return res.status(500).send('Erro ao cadastrar paciente.');
+  try {
+    await db.query(sql, values);
     res.status(201).send('Paciente cadastrado com sucesso!');
-  });
+  } catch (err) {
+    res.status(500).send('Erro ao cadastrar paciente.');
+  }
 };
 
-export const atualizarPaciente = (req, res) => {
+export const atualizarPaciente = async (req, res) => {
   const { id } = req.params;
   const { nome, raca, especie, sexo, idade, tutor, telefone_tutor } = req.body;
 
@@ -36,28 +40,36 @@ export const atualizarPaciente = (req, res) => {
   `;
   const values = [nome, raca, especie, sexo, idade, tutor, telefone_tutor, id];
 
-  db.query(sql, values, (err, result) => {
-    if (err) return res.status(500).send('Erro ao atualizar paciente.');
+  try {
+    const [result] = await db.query(sql, values);
     if (result.affectedRows === 0) return res.status(404).send('Paciente não encontrado.');
     res.send('Paciente atualizado com sucesso!');
-  });
+  } catch (err) {
+    res.status(500).send('Erro ao atualizar paciente.');
+  }
 };
 
-export const deletarPaciente = (req, res) => {
+export const deletarPaciente = async (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM pacientes WHERE id = ?', [id], (err, result) => {
-    if (err) return res.status(500).send('Erro ao deletar paciente.');
+
+  try {
+    const [result] = await db.query('DELETE FROM pacientes WHERE id = ?', [id]);
     if (result.affectedRows === 0) return res.status(404).send('Paciente não encontrado.');
     res.send('Paciente deletado com sucesso!');
-  });
+  } catch (err) {
+    res.status(500).send('Erro ao deletar paciente.');
+  }
 };
 
-export const buscarPacientePorId = (req, res) => {
+export const buscarPacientePorId = async (req, res) => {
   const { id } = req.params;
   const sql = 'SELECT * FROM pacientes WHERE id = ?';
-  db.query(sql, [id], (err, results) => {
-    if (err) return res.status(500).send('Erro ao buscar paciente.');
+
+  try {
+    const [results] = await db.query(sql, [id]);
     if (results.length === 0) return res.status(404).send('Paciente não encontrado.');
     res.json(results[0]);
-  });
+  } catch (err) {
+    res.status(500).send('Erro ao buscar paciente.');
+  }
 };

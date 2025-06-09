@@ -1,17 +1,28 @@
-import mysql from 'mysql2';
-const mysql = require('mysql2');
+import mysql from 'mysql2/promise';
+import fs from 'fs/promises';
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1357',
-  database: 'clinvet'
-});
+let db;
 
-db.connect(err => {
-  if (err) throw err;
-  console.log('Conectado ao banco de dados!');
-});
+async function initDatabase() {
+  try {
+    db = await mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '1357',
+      database: 'clinvet',
+      multipleStatements: true,
+    });
 
-export default db;
+    console.log('Conectado ao banco de dados!');
 
+    // Lê e executa o script SQL de criação das tabelas
+    const sqlScript = await fs.readFile('./clinvet.sql', 'utf8');
+    await db.query(sqlScript);
+    console.log('Script SQL executado com sucesso!');
+  } catch (err) {
+    console.error('Erro ao inicializar banco:', err);
+    process.exit(1);
+  }
+}
+
+export { initDatabase, db };
