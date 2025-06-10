@@ -99,7 +99,7 @@ cd Zoonix
 
    ```bash
    cd backend
-   npm start
+   npm install
    node server.js
    ```
 
