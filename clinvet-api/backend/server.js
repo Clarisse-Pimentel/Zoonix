@@ -2,8 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initDatabase } from './db.js'; // <-- adicionado
+import { initDatabase } from './db.js'; 
+
+import atendimentosRoutes from './routes/atendimentos.js';
+import funcionariosRoutes from './routes/funcionarios.js';
 import pacientesRoutes from './routes/pacientes.js';
+import loginRoutes from './routes/login.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       alert("Paciente editado com sucesso!");
-      window.location.href = "index.html"; // ou "../Pacientes/index.html"
+      window.location.href = "index.html"; 
     });
 
   } catch (error) {
