@@ -52,10 +52,12 @@ CREATE TABLE atendimentos(
   id INT NOT NULL AUTO_INCREMENT,
   id_pacientes INT NOT NULL,
   id_funcionarios INT NOT NULL,
+  id_veterinario INT NOT NULL,
   data DATE NOT NULL,
   tratamento TEXT NOT NULL,
   diagnostico TEXT NOT NULL,
   FOREIGN KEY (id_pacientes) REFERENCES pacientes(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (id_funcionarios) REFERENCES funcionarios(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (id_veterinario) REFERENCES veterinarios(id_funcionarios) ON DELETE CASCADE ON UPDATE CASCADE
   PRIMARY KEY (id)
 );
