@@ -19,23 +19,26 @@ export const cadastrarFuncionario = async (req, res) => {
     try {
       await db.beginTransaction();
 
-      const result = await db.query(
+      const [result] = await db.query(
         'INSERT INTO funcionarios (nome, cpf, cargo, telefone, email, senha) VALUES (?, ?, ?, ?, ?, ?)',
         [nome, cpf, cargo, telefone, email, senha]
       );
 
-      if (cargo === 'Veterinário') {
+      const cargotipo = cargo.toLowerCase();
+
+      if (cargotipo === 'Veterinário' || cargotipo === 'Veterinária'|| cargotipo === 'veterinario') {
+        const { crmv, especialidade } = req.body;
         if (!crmv || !especialidade) {
           await db.rollback();
           return res.status(400).send('Preencha todos os campos obrigatórios para veterinários.');
         }
         await db.query(
-          'INSERT INTO veterinarios (funcionario_id, crmv, especialidade) VALUES (?, ?, ?)',
+          'INSERT INTO veterinarios (id_funcionarios, crmv, especialidade) VALUES (?, ?, ?)',
           [result.insertId, crmv, especialidade]
         );
       }
       
-      if (cargo === 'Administrador'){
+      if (cargotipo === 'Administrador'){
         await db.query(
           'INSERT INTO administradores (funcionario_id) VALUES (?)',
           [result.insertId]
