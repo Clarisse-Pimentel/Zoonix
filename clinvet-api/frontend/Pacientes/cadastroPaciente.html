@@ -2,38 +2,41 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Cadastrar Paciente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Paciente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
-  <script src="cadastrarPaciente.js"></script>
-
 </head>
+
 <body>
-  <div class="header" style="background-color: #3b4dbc; color: white; padding: 20px;">
-    <h2>Cadastrar Paciente</h2>
-  </div>
+  <!-- Botão para abrir o modal -->
+  <button class="btn-abrir-modal" id="btnAbrirModal">Novo Paciente</button>
+  <!-- Modal usando dialog -->
+  <dialog class="modal-cadastrar">
+    <div class="modal-header">Cadastrar Paciente</div>
+    <div class="modal-body">
+      <form class="form-cadastro">
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Nome" required>
+          <input type="text" name="raca" placeholder="Raça" required>
+          <input type="text" name="especie" placeholder="Espécie" required>
+        </div>
+        <div class="form-row">
+          <input type="text" name="sexo" placeholder="Sexo" required>
+          <input type="number" name="idade" placeholder="Idade" required>
+          <input type="text" name="tutor" placeholder="Tutor" required>
+          <input type="text" name="telefone" placeholder="Telefone" required>
+        </div>
 
-  <main class="main-content" style="padding: 40px;">
-    <form action="#" method="POST" class="form-cadastro">
-      <div class="form-row">
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="raca" placeholder="Raça" required>
-        <input type="text" name="especie" placeholder="Espécie" required>
-      </div>
-      <div class="form-row">
-        <input type="text" name="sexo" placeholder="Sexo" required>
-        <input type="number" name="idade" placeholder="Idade" required>
-        <input type="text" name="tutor" placeholder="Tutor" required>
-        <input type="text" name="telefone" placeholder="Telefone" required>
-      </div>
+        <hr>
 
-      <hr style="margin: 30px 0; border: 1px solid #8be78c;">
-
-      <div class="form-actions">
-        <button type="button" class="btn-cancelar">Cancelar</button>
-        <button type="submit" class="btn-adicionar">Adicionar</button>
-      </div>
-    </form>
-  </main>
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-adicionar">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  <script src="cadastrarPaciente.js"></script>
 </body>
 </html>
