@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pacientes - ClinVet+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css" />
-  
 </head>
+
 <body>
   <div class="sidebar">
     <h1>ClinVet+</h1>
@@ -21,21 +22,21 @@
   </div>
 
   <main class="main-content">
-<header>
-  <h2>Pacientes</h2>
-  <div class="search-bar">
-    <input type="text" placeholder="Buscar" id="searchInput" />
-    <button id="searchButton">🔍</button>
-  </div>
-  <button class="novo-paciente" id="btnNovoPaciente">NOVO PACIENTE</button>
-</header>
+    <header>
+      <h2>Pacientes</h2>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar" id="searchInput" />
+        <button id="searchButton">🔍</button>
+      </div>
+      <button class="novo-paciente" id="btnNovoPaciente">NOVO PACIENTE</button>
+    </header>
 
     <table>
       <thead>
         <tr>
           <th>Nome</th>
           <th>Raça</th>
-          <th>Espécie</th>
+          <th>Especie</th>
           <th>Sexo</th>
           <th>Idade</th>
           <th>Tutor</th>
@@ -44,11 +45,77 @@
         </tr>
       </thead>
       <tbody id="pacientesTableBody">
-
+        <!-- Pacientes serão inseridos aqui -->
       </tbody>
     </table>
   </main>
 
+  <!-- 🔥 Modal de Cadastro -->
+  <dialog class="modal-cadastrar">
+    <div class="modal-header">Cadastrar Paciente</div>
+    <div class="modal-body">
+      <form class="form-cadastro">
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Nome" required>
+          <input type="text" name="raca" placeholder="Raça">
+          <input type="text" name="especie" placeholder="Especie" required>
+        </div>
+        <div class="form-row">
+          <input type="text" name="sexo" placeholder="Sexo" required>
+          <input type="number" name="idade" placeholder="Idade">
+          <input type="text" name="tutor" placeholder="Tutor" required>
+          <input type="text" name="telefone" placeholder="Telefone">
+        </div>
+
+        <hr>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn-adicionar">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="modal-editar">
+    <div class="modal-header">Editar Paciente</div>
+    <div class="modal-body">
+      <form class="form-edicao">
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Nome" required>
+          <input type="text" name="raca" placeholder="Raça">
+          <input type="text" name="especie" placeholder="Espécie" required>
+        </div>
+        <div class="form-row">
+          <input type="text" name="sexo" placeholder="Sexo" required>
+          <input type="number" name="idade" placeholder="Idade">
+          <input type="text" name="tutor" placeholder="Tutor" required>
+          <input type="text" name="telefone" placeholder="Telefone">
+        </div>
+        <hr>
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar-editar">Cancelar</button>
+          <button type="submit" class="btn-editar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="modal-excluir">
+  <div class="modal-header">AVISO</div>
+  <div class="modal-body">
+    <p>Tem certeza que deseja excluir este paciente?</p>
+    <div class="form-actions">
+      <button class="btn-cancelar-excluir">Não</button>
+      <button class="btn-confirmar-excluir">Sim</button>
+    </div>
+  </div>
+</dialog>
+
   <script src="pacientes.js"></script>
+  <script src="cadastrarPaciente.js"></script>
+  <script src="editarPaciente.js"></script>
+  <script src="excluir.js"></script>
+
 </body>
 </html>
