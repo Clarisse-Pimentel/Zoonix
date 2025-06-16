@@ -1,35 +1,50 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const btnCancelar = document.querySelector(".btn-cancelar");
-  const btnConfirmar = document.querySelector(".btn-adicionar");
+const modalExcluir = document.querySelector('dialog.modal-excluir');
+const btnCancelarExcluir = document.querySelector('.btn-cancelar-excluir');
+const btnConfirmarExcluir = document.querySelector('.btn-confirmar-excluir');
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("id");
+let pacienteIdExcluir = null;
 
-  if (!id) {
-    alert("ID do paciente não informado.");
-    window.location.href = "index.html";
-    return;
-  }
+// Abrir modal de excluir
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('deletar')) {
+    e.preventDefault();
+    const href = e.target.closest('a').getAttribute('href');
+    const urlParams = new URLSearchParams(href.split('?')[1]);
+    pacienteIdExcluir = urlParams.get('id');
 
-  btnCancelar.addEventListener("click", () => {
-    window.location.href = "index.html";
-  });
-
-  btnConfirmar.addEventListener("click", async () => {
-    try {
-      const resposta = await fetch(`http://localhost:3000/pacientes/${id}`, {
-        method: "DELETE"
-      });
-
-      if (!resposta.ok) {
-        alert("Erro ao excluir o paciente.");
-        return;
-      }
-
-      alert("Paciente excluído com sucesso!");
-      window.location.href = "index.html";
-    } catch (error) {
-      alert("Erro ao conectar com o servidor: " + error.message);
+    if (pacienteIdExcluir) {
+      modalExcluir.showModal();
+    } else {
+      alert('ID do paciente não encontrado.');
     }
-  });
+  }
+});
+
+// Cancelar exclusão
+btnCancelarExcluir.addEventListener('click', () => {
+  modalExcluir.close();
+  pacienteIdExcluir = null;
+});
+
+// Confirmar exclusão
+btnConfirmarExcluir.addEventListener('click', async () => {
+  if (!pacienteIdExcluir) return;
+
+  try {
+    const resposta = await fetch(`http://localhost:3000/pacientes/${pacienteIdExcluir}`, {
+      method: 'DELETE'
+    });
+
+    if (!resposta.ok) {
+      alert('Erro ao excluir o paciente.');
+      return;
+    }
+
+    alert('Paciente excluído com sucesso!');
+    modalExcluir.close();
+    carregarPacientes(); // Atualiza a lista
+    pacienteIdExcluir = null;
+  } catch (error) {
+    alert('Erro na conexão: ' + error.message);
+  }
 });
