@@ -1,44 +1,47 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector(".form-cadastro");
-  const btnCancelar = document.querySelector(".btn-cancelar");
+const modal = document.querySelector('dialog.modal-cadastrar');
+const btnNovoPaciente = document.getElementById('btnNovoPaciente');
+const btnCancelar = document.querySelector('.btn-cancelar');
+const form = document.querySelector('.form-cadastro');
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+btnNovoPaciente.addEventListener('click', () => {
+  modal.showModal();
+});
 
-    const paciente = {
-      nome: form.nome.value.trim(),
-      raca: form.raca.value.trim(),
-      especie: form.especie.value.trim(),
-      sexo: form.sexo.value.trim(),
-      idade: parseInt(form.idade.value),
-      tutor: form.tutor.value.trim(),
-      telefone_tutor: form.telefone.value.trim() // note que no backend o campo é telefone_tutor
-    };
+btnCancelar.addEventListener('click', () => {
+  modal.close();
+});
 
-    try {
-      const response = await fetch('http://localhost:3000/pacientes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(paciente)
-      });
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        alert('Erro ao cadastrar paciente: ' + errorText);
-        return;
-      }
+  const paciente = {
+    nome: form.nome.value.trim(),
+    raca: form.raca.value.trim(),
+    especie: form.especie.value.trim(),
+    sexo: form.sexo.value.trim(),
+    idade: parseInt(form.idade.value),
+    tutor: form.tutor.value.trim(),
+    telefone_tutor: form.telefone.value.trim()
+  };
 
-      alert('Paciente cadastrado com sucesso!');
-      window.location.href = "index.html"; // Redireciona para a listagem
+  try {
+    const response = await fetch('http://localhost:3000/pacientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(paciente)
+    });
 
-    } catch (error) {
-      alert('Erro na conexão com o servidor: ' + error.message);
+    if (!response.ok) {
+      const errorText = await response.text();
+      alert('Erro ao cadastrar paciente: ' + errorText);
+      return;
     }
-  });
 
-  btnCancelar.addEventListener("click", () => {
-    window.location.href = "index.html";
-  });
+    alert('Paciente cadastrado com sucesso!');
+    modal.close();
+    form.reset();
+    carregarPacientes(); 
+  } catch (error) {
+    alert('Erro na conexão: ' + error.message);
+  }
 });
