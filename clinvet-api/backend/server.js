@@ -7,7 +7,7 @@ import { initDatabase } from './db.js';
 import atendimentosRoutes from './routes/atendimentos.js';
 import funcionariosRoutes from './routes/funcionarios.js';
 import pacientesRoutes from './routes/pacientes.js';
-import loginRoutes from './routes/login.js';
+//import loginRoutes from './routes/login.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +29,7 @@ app.use('/pacientes', pacientesRoutes);
 app.use('/funcionarios', funcionariosRoutes);
 app.use('/atendimentos', atendimentosRoutes);
 app.use('/login', loginRoutes);
+
 
 // Rota de teste
 app.get('/', (req, res) => {
