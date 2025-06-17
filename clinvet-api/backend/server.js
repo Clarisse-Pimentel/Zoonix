@@ -7,7 +7,7 @@ import { initDatabase } from './db.js';
 import atendimentosRoutes from './routes/atendimentos.js';
 import funcionariosRoutes from './routes/funcionarios.js';
 import pacientesRoutes from './routes/pacientes.js';
-//import loginRoutes from './routes/login.js';
+import loginRoutes from './routes/login.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -28,7 +28,7 @@ app.use(express.static(frontendPath));
 app.use('/pacientes', pacientesRoutes);
 app.use('/funcionarios', funcionariosRoutes);
 app.use('/atendimentos', atendimentosRoutes);
-//app.use('/login', loginRoutes);
+app.use('/login', loginRoutes);
 
 // Rota de teste
 app.get('/', (req, res) => {
@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 initDatabase().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
+
   });
 }).catch((err) => {
   console.error('Erro ao iniciar o banco de dados:', err);
