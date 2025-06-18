@@ -3,7 +3,8 @@ import {
   listarPacientes,
   cadastrarPaciente,
   atualizarPaciente,
-  deletarPaciente
+  deletarPaciente,
+  buscarPacientePorId
 } from '../controllers/pacientesController.js';
 
 const router = express.Router();
@@ -12,9 +13,9 @@ router.get('/', listarPacientes);
 router.post('/', cadastrarPaciente);
 router.put('/:id', atualizarPaciente);
 router.delete('/:id', deletarPaciente);
+router.get('/:id', buscarPacientePorId);
 
 export default router;
 
-import { buscarPacientePorId } from '../controllers/pacientesController.js';
 
-router.get('/:id', buscarPacientePorId);
+
