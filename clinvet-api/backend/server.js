@@ -13,7 +13,7 @@ import pacientesRoutes from './routes/pacientes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const frontendPath = path.join(__dirname, '..', 'frontend', 'Pacientes'); //tem q mudar
+const frontendPath = path.join(__dirname, '..', 'frontend', 'Funcionarios'); //tem q mudar
 
 const app = express();
 const PORT = 3000;
