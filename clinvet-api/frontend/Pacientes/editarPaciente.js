@@ -1,70 +1,115 @@
-document.addEventListener("DOMContentLoaded", async () => {
+/*const modalEditar = document.querySelector('dialog.modal-editar');
+const btnCancelarEditar = document.querySelector('btn-cancelar-editar');
+const btnConfirmarEditar = document.querySelector('bn-confirmar-editar');
+
+let pacienteIdEditar = null;
+
+// Abrir modal de edição
+document.addEventListener('click', (e) => {
   const form = document.querySelector(".form-edicao");
-  const btnCancelar = document.querySelector(".btn-cancelar");
+  if(e.target.classList.contains('editar')) {
+    e.preventDefault();
+    const href = e.target.closest('a').getAttribute('href');
+    const urlParams = new URLSearchParams(href.split('?')[1]);
+    pacienteIdEditar = urlParams.get('id');
+  }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("id");
+  if(pacienteIdEditar) {
+    modalEditar.showModal();
 
-  if (!id) {
-    alert("ID do paciente não encontrado.");
-    window.location.href = "index.html";
+
+  }
+})
+*/
+
+const modalEditar = document.querySelector('dialog.modal-editar');
+const formEditar = document.querySelector('.form-edicao');
+const btnCancelarEditar = document.querySelector('.btn-cancelar-editar');
+
+let pacienteIdEditar = null;
+
+// Abrir modal de edição
+document.addEventListener('click', async (e) => {
+  if (e.target.classList.contains('editar')) {
+    e.preventDefault();
+
+    pacienteIdEditar = e.target.getAttribute('data-id');
+
+    if (!pacienteIdEditar) {
+      alert('ID do paciente não encontrado.');
+      return;
+    }
+
+    try {
+      const resposta = await fetch(`http://localhost:3000/pacientes/${pacienteIdEditar}`);
+      if (!resposta.ok) throw new Error('Paciente não encontrado no backend.');
+
+      const paciente = await resposta.json();
+
+      // Preencher formulário
+      formEditar.nome.value = paciente.nome || '';
+      formEditar.raca.value = paciente.raca || '';
+      formEditar.especie.value = paciente.especie || '';
+      formEditar.sexo.value = paciente.sexo || '';
+      formEditar.idade.value = paciente.idade || '';
+      formEditar.tutor.value = paciente.tutor || '';
+      formEditar.telefone.value = paciente.telefone_tutor || '';
+
+      modalEditar.showModal();
+
+    } catch (error) {
+      alert('Erro ao carregar paciente: ' + error.message);
+    }
+  }
+});
+
+// Cancelar edição
+btnCancelarEditar.addEventListener('click', () => {
+  modalEditar.close();
+  pacienteIdEditar = null;
+});
+
+// Submeter edição
+formEditar.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (!pacienteIdEditar) {
+    alert('ID do paciente não encontrado.');
     return;
   }
 
-  const urlBase = "http://localhost:3000/pacientes";
+  const dadosAtualizados = {
+    nome: formEditar.nome.value.trim(),
+    raca: formEditar.raca.value.trim(),
+    especie: formEditar.especie.value.trim(),
+    sexo: formEditar.sexo.value.trim(),
+    idade: parseInt(formEditar.idade.value),
+    tutor: formEditar.tutor.value.trim(),
+    telefone_tutor: formEditar.telefone.value.trim()
+  };
 
   try {
-    // Buscar dados do paciente pelo backend
-    const resposta = await fetch(`${urlBase}/${id}`);
-    if (!resposta.ok) throw new Error("Paciente não encontrado no backend.");
-    const paciente = await resposta.json();
-
-    // Preencher formulário
-    form.nome.value = paciente.nome || '';
-    form.raca.value = paciente.raca || '';
-    form.especie.value = paciente.especie || '';
-    form.sexo.value = paciente.sexo || '';
-    form.idade.value = paciente.idade || '';
-
-    // Submeter edição
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const dadosAtualizados = {
-        nome: form.nome.value.trim(),
-        raca: form.raca.value.trim(),
-        especie: form.especie.value.trim(),
-        sexo: form.sexo.value.trim(),
-        idade: parseInt(form.idade.value),
-        tutor: paciente.tutor,
-        telefone_tutor: paciente.telefone_tutor
-      };
-
-      const respostaEdicao = await fetch(`${urlBase}/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dadosAtualizados)
-      });
-
-      if (!respostaEdicao.ok) {
-        alert("Erro ao salvar alterações.");
-        return;
-      }
-
-      alert("Paciente editado com sucesso!");
-      window.location.href = "index.html"; 
+    const resposta = await fetch(`http://localhost:3000/pacientes/${pacienteIdEditar}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dadosAtualizados)
     });
 
-  } catch (error) {
-    alert("Erro ao carregar paciente: " + error.message);
-    window.location.href = "index.html";
-  }
+    if (!resposta.ok) {
+      const erroTexto = await resposta.text();
+      alert('Erro ao atualizar paciente: ' + erroTexto);
+      return;
+    }
 
-  // Botão cancelar
-  btnCancelar.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.location.href = "index.html";
-  });
+    alert('Paciente atualizado com sucesso!');
+    modalEditar.close();
+    formEditar.reset();
+    pacienteIdEditar = null;
+    carregarPacientes(); // Atualiza a tabela
+
+  } catch (error) {
+    alert('Erro na conexão: ' + error.message);
+  }
 });

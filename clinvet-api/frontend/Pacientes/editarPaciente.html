@@ -3,34 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>Editar Paciente</title>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <div class="header" style="background-color: #3b4dbc; color: white; padding: 20px;">
-    <h2>Editar Paciente</h2>
-  </div>
+    <dialog class="modal-editar">
+    <div class="modal-header">Editar Paciente</div>
+    <div class="modal-body">
+      <form class="form-edicao">
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Nome" required>
+          <input type="text" name="raca" placeholder="Raça">
+          <input type="text" name="especie" placeholder="Espécie" required>
+        </div>
+        <div class="form-row">
+          <input type="text" name="sexo" placeholder="Sexo" required>
+          <input type="number" name="idade" placeholder="Idade">
+          <input type="text" name="tutor" placeholder="Tutor" required>
+          <input type="text" name="telefone" placeholder="Telefone">
+        </div>
+        <hr>
+        <div class="form-actions">
+          <button type="button" class="btn-cancelar-editar">Cancelar</button>
+          <button type="submit" class="btn-adicionar">Editar</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
 
-  <main class="main-content" style="padding: 40px;">
-    <form action="#" method="POST" class="form-edicao">
-      <div class="form-row">
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="raca" placeholder="Raça" required>
-        <input type="text" name="especie" placeholder="Espécie" required>
-      </div>
-      <div class="form-row">
-        <input type="text" name="sexo" placeholder="Sexo" required>
-        <input type="number" name="idade" placeholder="Idade" required>
-      </div>
-
-      <hr style="margin: 30px 0; border: 1px solid #8be78c;">
-
-      <div class="form-actions">
-        <button type="button" class="btn-cancelar">Cancelar</button>
-        <button type="submit" class="btn-adicionar">Editar</button>
-      </div>
-    </form>
-  </main>
   <script src="editarPaciente.js"></script>
 </body>
 </html>

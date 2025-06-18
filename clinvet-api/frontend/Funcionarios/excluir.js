@@ -2,7 +2,7 @@ const modalExcluir = document.querySelector('dialog.modal-excluir');
 const btnCancelarExcluir = document.querySelector('.btn-cancelar-excluir');
 const btnConfirmarExcluir = document.querySelector('.btn-confirmar-excluir');
 
-let pacienteIdExcluir = null;
+let FuncionarioIdExcluir = null;
 
 // Abrir modal de excluir
 document.addEventListener('click', (e) => {
@@ -10,12 +10,12 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     const href = e.target.closest('a').getAttribute('href');
     const urlParams = new URLSearchParams(href.split('?')[1]);
-    pacienteIdExcluir = urlParams.get('id');
+    FuncionarioIdExcluir = urlParams.get('id');
 
-    if (pacienteIdExcluir) {
+    if (FuncionarioIdExcluir) {
       modalExcluir.showModal();
     } else {
-      alert('ID do paciente não encontrado.');
+      alert('ID do funcionário não encontrado.');
     }
   }
 });
@@ -23,27 +23,27 @@ document.addEventListener('click', (e) => {
 // Cancelar exclusão
 btnCancelarExcluir.addEventListener('click', () => {
   modalExcluir.close();
-  pacienteIdExcluir = null;
+  FuncionarioIdExcluir = null;
 });
 
 // Confirmar exclusão
 btnConfirmarExcluir.addEventListener('click', async () => {
-  if (!pacienteIdExcluir) return;
+  if (!FuncionarioIdExcluir) return;
 
   try {
-    const resposta = await fetch(`http://localhost:3000/pacientes/${pacienteIdExcluir}`, {
+    const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdExcluir}`, {
       method: 'DELETE'
     });
 
     if (!resposta.ok) {
-      alert('Erro ao excluir o paciente.');
+      alert('Erro ao excluir o funcionário.');
       return;
     }
 
-    alert('Paciente excluído com sucesso!');
+    alert('Funcionário excluído com sucesso!');
     modalExcluir.close();
-    carregarPacientes(); // Atualiza a lista
-    pacienteIdExcluir = null;
+    carregarFuncionarios(); // Atualiza a lista
+    FuncionarioIdExcluir = null;
   } catch (error) {
     alert('Erro na conexão: ' + error.message);
   }
