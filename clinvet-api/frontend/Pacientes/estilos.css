@@ -134,7 +134,7 @@ tbody td {
 }
 
 /* Modal */
-dialog.modal-cadastrar{
+dialog.modal-cadastrar, dialog.modal-editar{
   border: none;
   border-radius: 8px;
   padding: 0;
@@ -194,7 +194,7 @@ dialog::backdrop {
   margin-top: 20px;
 }
 
-.btn-cancelar,.btn-adicionar {
+.btn-cancelar,.btn-adicionar, .btn-cancelar-editar {
   padding: 8px 20px;
   border: none;
   border-radius: 20px;
@@ -203,7 +203,7 @@ dialog::backdrop {
   font-weight: 700;
 }
 
-.btn-cancelar {
+.btn-cancelar, .btn-cancelar-editar {
   background-color: #ccc;
 }
 
