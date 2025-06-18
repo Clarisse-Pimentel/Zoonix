@@ -1,0 +1,467 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    flex-direction: row;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    background-color: #3b4dbc;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #8be78c;
+    padding-bottom: 5px;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-x: auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+header h2 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Barra de pesquisa */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 2px solid #8be78c;
+    border-radius: 20px;
+    padding: 5px 10px;
+    background-color: white;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Botão novo funcionário */
+.novo-funcionario {
+    background-color: #3b4dbc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border: 2px solid #8be78c;
+}
+
+thead {
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #8be78c;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 10px;
+    font-size: 14px;
+}
+
+/* Corpo da tabela com fonte regular */
+tbody td {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+/* Aumenta a largura da coluna do campo 1 (Nome) */
+td:nth-child(1), th:nth-child(1) {
+    padding: 12px 12px;
+}
+
+/* Aumenta a largura da coluna do campo 2 (CPF) */
+td:nth-child(2), th:nth-child(2) {
+    padding: 12px 12px;
+}
+
+/* Aumenta a largura da coluna do campo 4 (CRMV) */
+td:nth-child(4), th:nth-child(4) {
+    padding: 12px 12px;
+}
+
+/* Diminui a largura da coluna do campo 5 (Especialidade) */
+td:nth-child(5), th:nth-child(5) {
+    padding: 12px 8px;
+}
+
+/* Diminui a largura da coluna do campo 6 (Telefone) */
+td:nth-child(6), th:nth-child(6) {
+    padding: 12px 8px;
+}
+
+/* Diminui a largura da coluna das Ações*/
+td:last-child, th:last-child {
+    padding: 12px 6px;
+}
+
+td img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+td button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 4px;
+}
+
+input:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+
+/* Campos CMRV e Especialidade escurecidos para indicar desabelitação */
+input:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+/* Modais com formulário */
+dialog.modal-cadastrar, dialog.modal-editar{
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    width: 70%;
+    max-width: 700px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    background-color: #3b4dbc;
+    color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 30px;
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.form-row input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-row input[name="cargo"],
+.form-row input[name="senha"] {
+    flex: 0.5;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancelar,.btn-adicionar, .btn-cancelar-editar {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+.btn-cancelar, .btn-cancelar-editar {
+    background-color: #ccc;
+}
+
+.btn-adicionar {
+    background-color: #3b4dbc;
+    color: white;
+}
+
+/* Separador */
+hr {
+    border: 1px solid #8be78c;
+    margin: 20px 0;
+}
+
+/* Botão para abrir o modal */
+.btn-abrir-modal {
+    margin: 30px;
+    padding: 10px 20px;
+    background-color: #3b4dbc;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Modal de Exclusão */
+dialog.modal-excluir {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    width: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+dialog.modal-excluir::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-excluir .modal-header {
+    background-color: #3b4dbc;
+    color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.modal-excluir .modal-body {
+    padding: 30px;
+    text-align: center;
+}
+
+.modal-excluir .modal-body p {
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.modal-excluir .form-actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn-cancelar-excluir, .btn-confirmar-excluir {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+.btn-cancelar-excluir {
+    background-color: #ccc;
+}
+
+.btn-confirmar-excluir {
+    background-color: #3b4dbc;
+    color: white;
+}
+
+
+/* Responsividade */
+
+/* Ajustes para tablets */
+@media (max-width: 1024px) {
+    
+    .sidebar {
+        width: 180px;
+        padding: 15px;
+    }
+
+    .sidebar h1 {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .sidebar li {
+        font-size: 16px;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .novo-funcionario {
+        align-self: flex-end;
+    }
+
+    th, td {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+
+    td:nth-child(1), th:nth-child(1) {
+        padding: 10px 10px;
+    }
+
+    td:nth-child(2), th:nth-child(2) {
+        padding: 10px 10px;
+    }
+
+    td:nth-child(4), th:nth-child(4) {
+        padding: 10px 10px;
+    }
+
+    td:nth-child(5), th:nth-child(5) {
+        padding: 10px 6px;
+    }
+
+    td:nth-child(6), th:nth-child(6) {
+        padding: 10px 6px;
+    }
+    
+    td:last-child, th:last-child {
+    padding: 10px 4px;
+    }
+}
+
+/* Ajustes para celulares */
+@media (max-width: 768px) {
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+
+    .sidebar h1 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    td:nth-child(1), th:nth-child(1) {
+        padding: 8px 10px;
+    }
+
+    td:nth-child(2), th:nth-child(2) {
+        padding: 8px 10px;
+    }
+
+    td:nth-child(4), th:nth-child(4) {
+        padding: 8px 10px;
+    }
+
+    td:nth-child(5), th:nth-child(5) {
+        padding: 8px 6px;
+    }
+
+
+    td:nth-child(6), th:nth-child(6) {
+        padding: 8px 6px;
+    }
+    
+    td:last-child, th:last-child {
+    padding: 8px 4px;
+    }
+}
