@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funcionários - ClinVet+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1>ClinVet+</h1>
+        <nav>
+            <ul>
+                <li><strong>Menu</strong></li>
+                <li><strong>Pacientes</strong></li>
+                <li><strong>Atendimentos</strong></li>
+                <li><strong>Funcionários</strong></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <header>
+            <h2>Funcionários</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar" id="searchInput"/>
+                <button id="searchButton">🔍</button>
+            </div>
+            <button class="novo-funcionario" id="btnNovoFuncionario">NOVO FUNCIONÁRIO</button>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Cargo</th>
+                    <th>CRMV</th>
+                    <th>Especialidade</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Senha</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="funcionariosTableBody">
+            <!-- Funcionários serão incluídos aqui -->
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Modal de Cadastro -->
+    <dialog class="modal-cadastrar">
+        <div class="modal-header">Cadastrar Funcionário</div>
+        <div class="modal-body">
+            <form class="form-cadastro">
+                <div class="form-row">
+                    <input type="text" name="nome" placeholder="Nome" required>
+                    <input type="text" name="cpf" placeholder="CPF" required>
+                    <select name="cargo" required>
+                    <option value="">Cargo</option>
+                    <option value="veterinario">Veterinário</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="outro">Outro</option>
+                </select>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="crmv" placeholder="CRMV">
+                    <input type="text" name="especialidade" placeholder="Especialidade">
+                </div>
+                <div class="form-row">
+                    <input type="text" name="telefone" placeholder="Telefone" required>
+                    <input type="text" name="email" placeholder="E-mail" required>
+                    <input type="text" name="senha" placeholder="Senha" required>
+                </div>
+                <hr>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-adicionar">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Modal de Edição -->
+    <dialog class="modal-editar" >
+        <div class="modal-header">Editar Funcionário</div>
+        <div class="modal-body">
+            <form class="form-edicao">
+                <div class="form-row">
+                    <input type="text" name="nome" placeholder="Nome" required>
+                    <input type="text" name="cpf" placeholder="CPF" required>
+                    <select name="cargo" required>
+                        <option value="">Cargo</option>
+                        <option value="veterinario">Veterinário</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="crmv" placeholder="CRMV">
+                    <input type="text" name="especialidade" placeholder="Especialidade">
+                </div>
+                <div class="form-row">
+                    <input type="text" name="telefone" placeholder="Telefone" required>
+                    <input type="text" name="email" placeholder="E-mail" required>
+                    <input type="text" name="senha" placeholder="Senha" required>
+                </div>
+                <hr>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar-editar">Cancelar</button>
+                    <button type="submit" class="btn-adicionar">Editar</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+<!-- Modal de Exclusão -->
+    <dialog class="modal-excluir">
+        <div class="modal-header">AVISO</div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja excluir este funcionário?</p>
+        <div class="form-actions">
+            <button class="btn-cancelar-excluir">Não</button>
+        <button class="btn-confirmar-excluir">Sim</button>
+        </div>
+        </div>
+    </dialog>
+
+    <script src="funcionarios.js"></script>
+    <script src="cadastrarFuncionario.js"></script>
+    <script src="editarFuncionario.js"></script>
+    <script src="excluir.js"></script>
+</body>
+</html>
+
