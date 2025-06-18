@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UFT-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Funcionários - ClinVet+</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="estilos.css" />
+    </head>
+    <main>
+        <body>
+            <button class="btn-abrir-modal" id="btnAbrirModal">NOVO FUNCIONÁRIO</button>
+            <dialog class="modal-cadastrar">
+                <div class="modal-header">Cadastrar Funcionário</div>
+                <div class="modal-body">
+                    <form class="form-cadastro">
+                        <div class="form-row">
+                            <input type="text" name="nome" placeholder="Nome" required>
+                            <input type="text" name="cpf" placeholder="CPF" required>
+                            <input type="text" name="cargo" placeholder="Cargo" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="crmv" placeholder="CRMV">
+                            <input type="text" name="especialidade" placeholder="Especialidade">
+                        </div>
+                        <div class="form-row">
+                            <input type="text" name="telefone" placeholder="Telefone" required>
+                            <input type="text" name="email" placeholder="E-mail" required>
+                            <input type="text" name="senha" placeholder="Senha" required>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+    </main>
+    <script src="funcionarios.js"></script>
+    </body>
+    </html>
