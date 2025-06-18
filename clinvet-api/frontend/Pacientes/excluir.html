@@ -1,77 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <title>Excluir Paciente</title>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background-color: rgba(0, 0, 0, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-    }
-
-    .modal-excluir {
-      background: white;
-      border-radius: 6px;
-      overflow: hidden;
-      width: 320px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .modal-header {
-      background-color: #3b4dbc;
-      color: white;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .modal-body {
-      padding: 30px;
-      text-align: center;
-    }
-
-    .modal-body p {
-      font-size: 16px;
-      margin-bottom: 25px;
-    }
-
-    .modal-body div {
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .btn-cancelar, .btn-adicionar {
-      padding: 8px 20px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-    }
-
-    .btn-cancelar {
-      background-color: #ccc;
-    }
-
-    .btn-adicionar {
-      background-color: #3b4dbc;
-      color: white;
-    }
-  </style>
-</head>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+<head>
 <body>
-  <div class="modal-excluir">
+  <dialog class="modal-excluir">
     <div class="modal-header">AVISO</div>
     <div class="modal-body">
       <p>Tem certeza que deseja excluir este item?</p>
@@ -80,8 +17,8 @@
         <button class="btn-adicionar">Sim</button>
       </div>
     </div>
-  </div>
-
+</dialog>
   <script src="excluir.js"></script>
 </body>
 </html>
+
