@@ -1,7 +1,11 @@
 import {db} from '../db.js';
 export const listarFuncionarios = async (req, res) => {
   try {
-    const [results] = await db.query('SELECT * FROM funcionarios');
+    const [results] = await db.query(`
+      SELECT f.*, v.crmv, v.especialidade
+      FROM funcionarios f
+      LEFT JOIN veterinarios v ON f.id = v.id_funcionarios
+      `);
     res.json(results);
   } catch (err) {
     res.status(500).send('Erro ao buscar funcionários.');
@@ -24,10 +28,12 @@ export const cadastrarFuncionario = async (req, res) => {
         [nome, cpf, cargo, telefone, email, senha]
       );
 
-      const cargotipo = cargo.toLowerCase();
+      /*const cargotipo = cargo.toLowerCase();
 
-      if (cargotipo === 'Veterinário' || cargotipo === 'Veterinária'|| cargotipo === 'veterinario') {
-        const { crmv, especialidade } = req.body;
+      if (cargotipo === 'veterinário' || cargotipo === 'veterinária'|| cargotipo === 'veterinario'|| cargotipo === 'veterinaria') {
+      */
+      if(cargo == 'veterinario')  {
+      const { crmv, especialidade } = req.body;
         if (!crmv || !especialidade) {
           await db.rollback();
           return res.status(400).send('Preencha todos os campos obrigatórios para veterinários.');
@@ -38,9 +44,9 @@ export const cadastrarFuncionario = async (req, res) => {
         );
       }
       
-      if (cargotipo === 'Administrador'){
+      if (cargo === 'administrador'){
         await db.query(
-          'INSERT INTO administradores (funcionario_id) VALUES (?)',
+          'INSERT INTO administradores (id_funcionarios) VALUES (?)',
           [result.insertId]
         );
       }
@@ -50,10 +56,11 @@ export const cadastrarFuncionario = async (req, res) => {
     } catch (err) {
       await db.rollback();
       console.error('Erro ao cadastrar funcionário:', err);
-      res.status(500).send('Erro ao cadastrar funcionário.');
+      res.status(500).send('Erro ao cadastrar funcionário: ' + err.message);
     }
   }
 
+  // Alterações na função atualizarFuncionario para atualizar corretamente os cargos e tabelas no banco de dados 
   export const atualizarFuncionario = async (req, res) => {
     const { id } = req.params;
     const { nome, cpf, cargo, telefone, email, senha } = req.body;
@@ -63,34 +70,108 @@ export const cadastrarFuncionario = async (req, res) => {
     }
 
     try {
-      const [result] = await db.query(
+      await db.beginTransaction;
+
+      // Busca o cargo atual no banco de dados
+      const[func] = await db.query(
+        'SELECT cargo FROM funcionarios WHERE id = ?', [id]
+      );
+
+      if(func.length === 0) {
+        await db.rollback();
+        return res.status(404).send('Funcionário não encontrado.');
+      }
+
+      const cargoAntigo = func[0].cargo;
+
+      // Atualiza a tabela de funcionarios
+      await db.query(
         'UPDATE funcionarios SET nome = ?, cpf = ?, cargo = ?, telefone = ?, email = ?, senha = ? WHERE id = ?',
         [nome, cpf, cargo, telefone, email, senha, id]
       );
 
-      if (cargo === 'Veterinário') {
-        const { crmv, especialidade } = req.body;
-        const [vetResult] = await db.query(
-          'UPDATE veterinarios SET crmv = ?, especialidade = ? WHERE funcionario_id = ?',
-          [crmv, especialidade, id]
-        );
-
+      if (cargoAntigo !== cargo) {
+        if(cargoAntigo === 'veterinario') {
+          await db.query(
+            'DELETE FROM veterinarios WHERE id_funcionarios = ?', [id]
+          );
+        }
+        if (cargoAntigo === 'administrador') {
+          await db.query(
+            'DELETE FROM administradores WHERE id_funcionarios = ?', [id]
+          );
+        }
       }
 
-      if (result.affectedRows === 0) return res.status(404).send('Funcionário não encontrado.');
+      // Se o cargo novo for veterinário, garante que está na tabela veterinário
+      if (cargo === 'veterinario') {
+        if(!crmv || !especialidade) {
+          await db.rollback();
+          return res.status(400).send('Preencha todos os campos obrigatórios para veterinários.');
+        }
 
+        const[vet] = await db.query(
+          'SELECT * FROM veterinarios WHERE id_funcionarios = ?', [id]
+        );
+
+        if(vet.length > 0) {
+          // Já existe, então atualiza na tabela
+          await db.query(
+            'UPDATE veterinarios SET crmv = ?, especialidade = ? WHERE id_funcionarios = ?', 
+            [crmv, especialidade, id]
+          );
+        } else {
+          // Se não existir, então insere na tabela
+          await db.query(
+            'INSERT INTO veterinarios (id_funcionarios, crmv, especialidade) VALUES (?, ?, ?)',
+            [crmv, especialidade, id]
+          );
+        }
+
+      } else {
+        // Se não for veterinário, garante que não existam dados residuais com seu id
+        await db.query(
+          'DELETE FROM veterinarios WHERE id_funcionarios = ?', [id]
+        );
+      }
+
+      // Se o novo cargo for administrador, garante que está na tabela administrador
+      if (cargo === 'administrador') {
+        
+        const[adm] = await db.query(
+          'SELECT * FROM administradores WHERE id_funcionarios = ?', [id]
+        );
+
+        // Se não existe, então insere na tabela
+        if(adm.length === 0) {
+          await db.query(
+            'INSERT INTO administradores (id_funcionarios) VALUES (?)', 
+            [id]
+          );
+        }
+      } else {
+        // Se não for administrador, remove dados residuais na tabela administradores com seu id
+        await db.query(
+          'DELETE FROM administradores WHERE id_funcionarios = ?', 
+          [id]
+        );
+      }
+
+      await db.commit();
       res.send('Funcionário atualizado com sucesso!');
     } catch (err) {
+      await db.rollback();
       console.error('Erro ao atualizar funcionário:', err);
       res.status(500).send('Erro ao atualizar funcionário.');
     }
   }
+
 export const deletarFuncionario = async (req, res) => {
   const { id } = req.params;
 
   try {
     const [result] = await db.query('DELETE FROM funcionarios WHERE id = ?', [id]);
-    if (result.affectedRows === 0) return res.status(404).send('Funcionário não encontrado.');
+    if (result.affectedRows === 0) return res.status(404).send('Funcionário não encontrado.'); 
     res.send('Funcionário deletado com sucesso!');
   } catch (err) {
     console.error('Erro ao deletar funcionário:', err);
