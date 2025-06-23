@@ -8,15 +8,40 @@ const inputEspecialidadeEditar = formEditar.especialidade;
 
 let FuncionarioIdEditar = null;
 
-// Problema pra atualizar quando é veterinário
-// Função para ativar/desativar CRMV e Especialidade
+
+formEditar.cpf.addEventListener('input', () => {
+    let cpf = formEditar.cpf.value.replace(/\D/g, '');
+
+    if (cpf.length > 11) cpf = cpf.slice(0, 11);
+
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    formEditar.cpf.value = cpf;
+});
+
+// Aplica máscara de telefone em tempo real
+formEditar.telefone.addEventListener('input', () => {
+    let tel = formEditar.telefone.value.replace(/\D/g, '');
+
+    if (tel.length > 11) tel = tel.slice(0, 11);
+
+    if (tel.length <= 10) {
+        tel = tel.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+        tel = tel.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+
+    form.telefone.value = tel;
+});
+
+// Função para ativar/desativar CRMV e Especialidade conforme cargo
 function verificarCargoEditar() {
     if (selectCargoEditar.value === 'veterinario') {
         inputCrmvEditar.disabled = false;
         inputEspecialidadeEditar.disabled = false;
     } else {
-        inputCrmvEditar.value = '';
-        inputEspecialidadeEditar.value = '';
         inputCrmvEditar.disabled = true;
         inputEspecialidadeEditar.disabled = true;
     }
@@ -37,15 +62,27 @@ document.addEventListener('click', async (e) => {
             return;
         }
 
+        const token = localStorage.getItem('token'); // recupera token JWT
+
+        if (!token) {
+            alert('Usuário não autenticado. Faça login novamente.');
+            return;
+        }
+
         try {
-            const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdEditar}`);
+            const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdEditar}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
             if (!resposta.ok) throw new Error('Funcionário não encontrado no backend.');
 
             const funcionario = await resposta.json();
 
-            // Preencher formulário
+            // Preencher formulário com dados do funcionário
             formEditar.nome.value = funcionario.nome || '';
-            formEditar.cpf.value = funcionario.cpf || '';
+            formEditar.cpf.value = funcionario.cpf || ''
             formEditar.cargo.value = funcionario.cargo || '';
             formEditar.crmv.value = funcionario.crmv || '';
             formEditar.especialidade.value = funcionario.especialidade || '';
@@ -54,7 +91,7 @@ document.addEventListener('click', async (e) => {
             formEditar.senha.value = funcionario.senha || '';
 
             modalEditar.showModal();
-            verificarCargoEditar(); // Atualiza os campos conforme o cargo
+            verificarCargoEditar(); // Ajusta campos conforme cargo
 
         } catch (error) {
             alert('Erro ao carregar funcionário: ' + error.message);
@@ -67,7 +104,7 @@ btnCancelarEditar.addEventListener('click', () => {
     modalEditar.close();
     formEditar.reset();
     FuncionarioIdEditar = null;
-    verificarCargoEditar(); // Reseta estado dos campos
+    verificarCargoEditar(); // Reset estado dos campos
 });
 
 // Submeter edição
@@ -79,7 +116,7 @@ formEditar.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Validação específica para veterinário
+    // Validação para veterinário
     if (formEditar.cargo.value === 'veterinario') {
         if (formEditar.crmv.value.trim() === '' || formEditar.especialidade.value.trim() === '') {
             alert('Para veterinários, CRMV e Especialidade são obrigatórios.');
@@ -91,18 +128,26 @@ formEditar.addEventListener('submit', async (e) => {
         nome: formEditar.nome.value.trim(),
         cpf: formEditar.cpf.value.trim(),
         cargo: formEditar.cargo.value,
-        crmv: formEditar.crmv.value.trim(),
-        especialidade: formEditar.especialidade.value.trim(),
+        crmv: formEditar.cargo.value === 'veterinario' ? formEditar.crmv.value.trim() : '',
+        especialidade: formEditar.cargo.value === 'veterinario' ? formEditar.especialidade.value.trim() : '',
         telefone: formEditar.telefone.value.trim(),
         email: formEditar.email.value.trim(),
         senha: formEditar.senha.value.trim()
     };
 
+    const token = localStorage.getItem('token'); // recupera token JWT
+
+    if (!token) {
+        alert('Usuário não autenticado. Faça login novamente.');
+        return;
+    }
+
     try {
         const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdEditar}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify(dadosAtualizados)
         });
@@ -117,8 +162,8 @@ formEditar.addEventListener('submit', async (e) => {
         modalEditar.close();
         formEditar.reset();
         FuncionarioIdEditar = null;
-        verificarCargoEditar(); // Garante reset dos campos
-        carregarFuncionarios(); // Atualiza a tabela
+        verificarCargoEditar();
+        carregarFuncionarios(); // Função para recarregar tabela
 
     } catch (error) {
         alert('Erro na conexão: ' + error.message);

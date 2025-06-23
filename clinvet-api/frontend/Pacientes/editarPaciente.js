@@ -1,32 +1,22 @@
-/*const modalEditar = document.querySelector('dialog.modal-editar');
-const btnCancelarEditar = document.querySelector('btn-cancelar-editar');
-const btnConfirmarEditar = document.querySelector('bn-confirmar-editar');
-
-let pacienteIdEditar = null;
-
-// Abrir modal de edição
-document.addEventListener('click', (e) => {
-  const form = document.querySelector(".form-edicao");
-  if(e.target.classList.contains('editar')) {
-    e.preventDefault();
-    const href = e.target.closest('a').getAttribute('href');
-    const urlParams = new URLSearchParams(href.split('?')[1]);
-    pacienteIdEditar = urlParams.get('id');
-  }
-
-  if(pacienteIdEditar) {
-    modalEditar.showModal();
-
-
-  }
-})
-*/
-
 const modalEditar = document.querySelector('dialog.modal-editar');
 const formEditar = document.querySelector('.form-edicao');
 const btnCancelarEditar = document.querySelector('.btn-cancelar-editar');
 
 let pacienteIdEditar = null;
+
+formEditar.telefone.addEventListener('input', () => {
+    let tel = formEditar.telefone.value.replace(/\D/g, '');
+
+    if (tel.length > 11) tel = tel.slice(0, 11);
+
+    if (tel.length <= 10) {
+        tel = tel.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+        tel = tel.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+
+    form.telefone.value = tel;
+});
 
 // Abrir modal de edição
 document.addEventListener('click', async (e) => {

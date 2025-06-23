@@ -17,17 +17,26 @@
                     <form class="form-cadastro">
                         <div class="form-row">
                             <input type="text" name="nome" placeholder="Nome" required>
-                            <input type="text" name="cpf" placeholder="CPF" required>
-                            <input type="text" name="cargo" placeholder="Cargo" required>
+                            <input type="text" name="cpf" placeholder="CPF" required pattern="\d{11}" maxlength="14" title="Digite exatamente 11 dígitos numéricos">
+                            <input list="cargos" name="cargo" placeholder="Cargo" required>
+                                <datalist id="cargos">
+                                <option value="veterinario">
+                                <option value="administrador">
+                            </datalist> 
                         </div>
                         <div class="form-row">
                             <input type="text" name="crmv" placeholder="CRMV">
                             <input type="text" name="especialidade" placeholder="Especialidade">
                         </div>
                         <div class="form-row">
-                            <input type="text" name="telefone" placeholder="Telefone" required>
+                            <input type="text" name="telefone" placeholder="Telefone" required maxlength="15" pattern="\\(\\d{2}\\) \\d{4,5}-\\d{4}" title="Formato esperado: (99) 99999-9999 ou (99) 9999-9999">
                             <input type="text" name="email" placeholder="E-mail" required>
                             <input type="text" name="senha" placeholder="Senha" required>
+                        </div>
+                        <hr>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancelar">Cancelar</button>
+                            <button type="submit" class="btn-adicionar">Adicionar</button>
                         </div>
                     </form>
                 </div>

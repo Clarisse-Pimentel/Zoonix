@@ -1,4 +1,4 @@
-import expreess from 'express';
+import express from 'express';
 import {
   listarFuncionarios,
   cadastrarFuncionario,
@@ -7,7 +7,14 @@ import {
   buscarFuncionarioPorId
 } from '../controllers/funcionariosController.js';
 
-const router = expreess.Router();
+import { authMiddleware } from '../middleware/autenticacao-jwt.js';
+import { permitirAcesso } from '../middleware/permissao.js';
+
+const router = express.Router();
+
+// Todas as rotas de funcionários exigem: usuário autenticado + cargo admin
+router.use(authMiddleware, permitirAcesso(['administrador']));
+
 router.get('/', listarFuncionarios);
 router.post('/', cadastrarFuncionario);
 router.put('/:id', atualizarFuncionario);
@@ -15,5 +22,3 @@ router.delete('/:id', deletarFuncionario);
 router.get('/:id', buscarFuncionarioPorId);
 
 export default router;
-// O código acima define as rotas para gerenciar funcionários na aplicação.
-

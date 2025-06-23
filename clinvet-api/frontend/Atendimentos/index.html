@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimentos - ClinVet+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1>ClinVet+</h1>
+        <nav>
+            <ul>
+                <li><a href="../Menu/index.html"><i class="fa fa-home"></i> Menu</a></li>
+                <li><a href="../Pacientes/index.html"><i class="fa fa-paw"></i> Pacientes</a></li>
+                <li><a href="index.html"><i class="fa fa-user-md"></i> Atendimentos</a></li>
+                <li><a href="../Funcionarios/index.html"><i class="fa fa-user"></i> Funcionários</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <header>
+            <h2>Atendimentos</h2>
+            <div class="search-bar">
+                <input type="texte" placeholder="Buscar" id="searchInput"/>
+                <button id="searchButton">🔍</button>
+            </div>
+            <button class="novo-atendimento" id="btnNovoAtendimento">NOVO ATENDIMENTO</button>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Veterinário</th>
+                    <th>Diagnóstico</th>
+                    <th>Tratamento</th>
+                    <th>Cadastrante</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="atendimentosTableBody">
+                <!-- Atendimentos serão incluídos aqui -->
+            </tbody>
+        </table>
+    </main>
+    
+    <dialog class="modal-cadastrar">
+        <div class="modal-header">Cadastrar Atendimento</div>
+        <div class="modal-body">
+            <form class="form-cadastro">
+                <div class="form-row">
+                    <input type="text" name="nome_paciente" placeholder="Paciente" required>
+                    <input type="text" name="nome_veterinario" placeholder="Veterinário" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="diagnostico" placeholder="Diagnóstico" required>
+                    <input type="text" name="tratamento" placeholder="Tratamento" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="nome_funcionario_cadastrante" placeholder="Cadastrante" required>
+                    <input type="text" name="data" placeholder="Data" required>
+                </div>
+                <hr>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar">Cancelar</button>
+                    <button type="submit" class="btn-adicionar">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+    <script src="atendimentos.js"></script>
+    <script src="cadastrarAtendimento.js"></script>
+</body>
+</html>
