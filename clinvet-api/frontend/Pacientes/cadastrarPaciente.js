@@ -3,6 +3,24 @@ const btnNovoPaciente = document.getElementById('btnNovoPaciente');
 const btnCancelar = document.querySelector('.btn-cancelar');
 const form = document.querySelector('.form-cadastro');
 
+
+
+// Aplica máscara de telefone em tempo real
+form.telefone.addEventListener('input', () => {
+    let tel = form.telefone.value.replace(/\D/g, '');
+
+    if (tel.length > 11) tel = tel.slice(0, 11);
+
+    if (tel.length <= 10) {
+        tel = tel.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+        tel = tel.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+
+    form.telefone.value = tel;
+});
+
+
 btnNovoPaciente.addEventListener('click', () => {
   modal.showModal();
 });

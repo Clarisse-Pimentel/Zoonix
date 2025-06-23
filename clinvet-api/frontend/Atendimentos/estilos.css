@@ -15,32 +15,6 @@ body {
 }
 
 /* Sidebar */
-/*
-.sidebar {
-  width: 230px;
-  background-color: #3b4dbc;
-  color: white;
-  padding: 20px;
-}
-
-.sidebar h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 40px;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar li {
-  margin: 20px 0;
-  font-size: 18px;
-  font-weight: bold;
-  border-bottom: 2px solid #8be78c;
-  padding-bottom: 5px;
-}*/
-
 .sidebar {
     width: 230px;
     background-color: #3b4dbc;
@@ -126,7 +100,6 @@ footer {
     background-color: #717ed4;
 }
 
-
 /* Main content */
 .main-content {
   flex: 1;
@@ -171,7 +144,7 @@ header h2 {
 }
 
 /* Botão novo paciente */
-.novo-paciente {
+.novo-atendimento {
   background-color: #3b4dbc;
   color: white;
   border: none;
@@ -403,9 +376,6 @@ dialog.modal-excluir::backdrop {
     gap: 15px;
   }
 
-  .novo-paciente {
-    align-self: flex-end;
-  }
 
   th, td {
     font-size: 13px;

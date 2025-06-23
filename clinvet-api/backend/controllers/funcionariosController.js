@@ -1,4 +1,6 @@
 import {db} from '../db.js';
+import bcrypt from 'bcrypt';
+
 export const listarFuncionarios = async (req, res) => {
   try {
     const [results] = await db.query(`
@@ -23,9 +25,11 @@ export const cadastrarFuncionario = async (req, res) => {
     try {
       await db.beginTransaction();
 
+      const senhaCriptografada = await bcrypt.hash(senha, 10);
+
       const [result] = await db.query(
         'INSERT INTO funcionarios (nome, cpf, cargo, telefone, email, senha) VALUES (?, ?, ?, ?, ?, ?)',
-        [nome, cpf, cargo, telefone, email, senha]
+        [nome, cpf, cargo, telefone, email, senhaCriptografada]
       );
 
       /*const cargotipo = cargo.toLowerCase();
@@ -63,14 +67,15 @@ export const cadastrarFuncionario = async (req, res) => {
   // Alterações na função atualizarFuncionario para atualizar corretamente os cargos e tabelas no banco de dados 
   export const atualizarFuncionario = async (req, res) => {
     const { id } = req.params;
-    const { nome, cpf, cargo, telefone, email, senha } = req.body;
+  console.log('ID recebido para atualização:', id);
+    const { nome, cpf, cargo, telefone, email, senha, crmv, especialidade } = req.body;
 
     if (!nome || !cpf || !cargo || !telefone || !email || !senha) {
       return res.status(400).send('Preencha todos os campos obrigatórios.');
     }
 
     try {
-      await db.beginTransaction;
+      await db.beginTransaction();
 
       // Busca o cargo atual no banco de dados
       const[func] = await db.query(
@@ -83,17 +88,19 @@ export const cadastrarFuncionario = async (req, res) => {
       }
 
       const cargoAntigo = func[0].cargo;
+      const senhaCriptografada = await bcrypt.hash(senha, 10);
 
       // Atualiza a tabela de funcionarios
       await db.query(
         'UPDATE funcionarios SET nome = ?, cpf = ?, cargo = ?, telefone = ?, email = ?, senha = ? WHERE id = ?',
-        [nome, cpf, cargo, telefone, email, senha, id]
+        [nome, cpf, cargo, telefone, email, senhaCriptografada, id]
       );
 
       if (cargoAntigo !== cargo) {
         if(cargoAntigo === 'veterinario') {
           await db.query(
-            'DELETE FROM veterinarios WHERE id_funcionarios = ?', [id]
+            'DELETE FROM veterinarios WHERE id_funcionarios = ?', 
+            [id]
           );
         }
         if (cargoAntigo === 'administrador') {
@@ -114,16 +121,15 @@ export const cadastrarFuncionario = async (req, res) => {
           'SELECT * FROM veterinarios WHERE id_funcionarios = ?', [id]
         );
 
-        if(vet.length > 0) {
-          // Já existe, então atualiza na tabela
-          await db.query(
-            'UPDATE veterinarios SET crmv = ?, especialidade = ? WHERE id_funcionarios = ?', 
-            [crmv, especialidade, id]
-          );
-        } else {
-          // Se não existir, então insere na tabela
+        if(vet.length === 0) {
+
           await db.query(
             'INSERT INTO veterinarios (id_funcionarios, crmv, especialidade) VALUES (?, ?, ?)',
+            [id, crmv, especialidade]
+          );
+        } else {
+          await db.query(
+            'UPDATE veterinarios SET crmv = ?, especialidade = ? WHERE id_funcionarios = ?', 
             [crmv, especialidade, id]
           );
         }
@@ -181,7 +187,13 @@ export const deletarFuncionario = async (req, res) => {
 
 export const buscarFuncionarioPorId = async (req, res) => {
   const { id } = req.params;
-  const sql = 'SELECT * FROM funcionarios WHERE id = ?';
+
+  const sql = `
+    SELECT f.*, v.crmv, v.especialidade
+    FROM funcionarios f
+    LEFT JOIN veterinarios v ON f.id = v.id_funcionarios
+    WHERE f.id = ?
+  `;
 
   try {
     const [results] = await db.query(sql, [id]);
