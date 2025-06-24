@@ -4,7 +4,8 @@ import {
   cadastrarFuncionario,
   atualizarFuncionario,
   deletarFuncionario,
-  buscarFuncionarioPorId
+  buscarFuncionarioPorId,
+  listarVeterinarios
 } from '../controllers/funcionariosController.js';
 
 import { authMiddleware } from '../middleware/autenticacao-jwt.js';
@@ -19,6 +20,8 @@ router.get('/', listarFuncionarios);
 router.post('/', cadastrarFuncionario);
 router.put('/:id', atualizarFuncionario);
 router.delete('/:id', deletarFuncionario);
+router.get('/veterinarios', listarVeterinarios);
 router.get('/:id', buscarFuncionarioPorId);
+
 
 export default router;

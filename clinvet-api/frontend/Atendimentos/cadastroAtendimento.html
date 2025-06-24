@@ -16,15 +16,21 @@
             <form class="form-cadastro">
                 <div class="form-row">
                     <input type="text" name="nome_paciente" placeholder="Paciente" required>
-                    <input type="text" name="nome_veterinario" placeholder="Veterinário" required>
+                    <select name="id_veterinario" required>
+                        <option value="">Selecione o veterinário</option>
+                        <!-- opções preenchidas dinamicamente -->
+                    </select>
                 </div>
                 <div class="form-row">
                     <input type="text" name="diagnostico" placeholder="Diagnóstico" required>
                     <input type="text" name="tratamento" placeholder="Tratamento" required>
                 </div>
                 <div class="form-row">
-                    <input type="text" name="nome_funcionario_cadastrante" placeholder="Cadastrante" required>
-                    <input type="text" name="data" placeholder="Data" required>
+                    <select name="id_funcionario" required>
+                        <option value="">Selecione o cadastrante</option>
+                        <!-- opções preenchidas dinamicamente -->
+                    </select>
+                    <input type="datetime-local" name="data" id="data" required>
                 </div>
                 <hr>
                 <div class="form-actions">

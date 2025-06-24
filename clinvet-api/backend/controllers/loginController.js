@@ -97,6 +97,8 @@ export const login = async (req, res) => {
 
     const usuario = usuarios[0];
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+    console.log('Senha enviada:', senha);
+    console.log('Senha no banco:', usuario.senha);
 
     if (!senhaCorreta) {
       return res.status(401).json({ mensagem: 'Senha incorreta' });

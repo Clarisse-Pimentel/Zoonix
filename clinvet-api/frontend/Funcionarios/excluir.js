@@ -31,13 +31,18 @@ btnConfirmarExcluir.addEventListener('click', async () => {
   if (!FuncionarioIdExcluir) return;
 
   try {
+    const token = localStorage.getItem('token');
     const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdExcluir}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+      'Authorization': `Bearer ${token}`
+      }
     });
 
     if (!resposta.ok) {
-      alert('Erro ao excluir o funcionário.');
-      return;
+    const msg = await resposta.text();
+    alert(msg || 'Erro ao excluir o funcionário.');
+    return;
     }
 
     alert('Funcionário excluído com sucesso!');

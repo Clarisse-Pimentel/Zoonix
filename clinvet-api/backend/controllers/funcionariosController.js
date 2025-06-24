@@ -23,6 +23,16 @@ export const cadastrarFuncionario = async (req, res) => {
     
  
     try {
+      // Verifica se o CPF já existe
+    const [cpfExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE cpf = ?',
+      [cpf]
+    );
+
+    if (cpfExistente.length > 0) {
+      return res.status(409).send('CPF já cadastrado.');
+    }
+
       await db.beginTransaction();
 
       const senhaCriptografada = await bcrypt.hash(senha, 10);
@@ -176,6 +186,15 @@ export const deletarFuncionario = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Verifica se existe atendimento vinculado ao funcionário
+    const [atendimentos] = await db.query(
+      'SELECT id FROM atendimentos WHERE id_funcionarios = ? OR id_veterinario = ?',
+      [id, id]
+    );
+    if (atendimentos.length > 0) {
+      return res.status(400).send('Não é possível deletar: funcionário vinculado a atendimentos.');
+    }
+
     const [result] = await db.query('DELETE FROM funcionarios WHERE id = ?', [id]);
     if (result.affectedRows === 0) return res.status(404).send('Funcionário não encontrado.'); 
     res.send('Funcionário deletado com sucesso!');
@@ -202,5 +221,18 @@ export const buscarFuncionarioPorId = async (req, res) => {
   } catch (err) {
     console.error('Erro ao buscar funcionário:', err);
     res.status(500).send('Erro ao buscar funcionário.');
+  }
+};
+
+export const listarVeterinarios = async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT f.id, f.nome
+      FROM veterinarios v
+      JOIN funcionarios f ON v.id_funcionarios = f.id
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).send('Erro ao buscar veterinários.');
   }
 };

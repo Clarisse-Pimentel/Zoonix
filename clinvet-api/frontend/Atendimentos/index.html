@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Atendimentos - ClinVet+</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="estilos.css" />
 </head>
@@ -26,10 +26,11 @@
         <header>
             <h2>Atendimentos</h2>
             <div class="search-bar">
-                <input type="texte" placeholder="Buscar" id="searchInput"/>
+                <input type="text" placeholder="Buscar" id="searchInput" />
                 <button id="searchButton">🔍</button>
             </div>
             <button class="novo-atendimento" id="btnNovoAtendimento">NOVO ATENDIMENTO</button>
+            
         </header>
 
         <table>
@@ -50,31 +51,88 @@
         </table>
     </main>
     
-    <dialog class="modal-cadastrar">
-        <div class="modal-header">Cadastrar Atendimento</div>
-        <div class="modal-body">
-            <form class="form-cadastro">
-                <div class="form-row">
-                    <input type="text" name="nome_paciente" placeholder="Paciente" required>
-                    <input type="text" name="nome_veterinario" placeholder="Veterinário" required>
+
+    <!-- Modal Cadastrar -->
+<dialog class="modal-cadastrar">
+    <div class="modal-header">Cadastrar Atendimento</div>
+    <div class="modal-body">
+        <form class="form-cadastro">
+            <div class="form-row">
+                <input type="text" name="nome_paciente" placeholder="Paciente" required />
+                <select name="id_veterinario" required>
+                    <option value="">Selecione o veterinário</option>
+                    <!-- opções preenchidas dinamicamente -->
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="text" name="diagnostico" placeholder="Diagnóstico" required />
+                <input type="text" name="tratamento" placeholder="Tratamento" required />
+            </div>
+            <div class="form-row">
+                    <select name="id_funcionario" required>
+                        <option value="">Selecione o cadastrante</option>
+                    <!-- opções preenchidas dinamicamente -->
+                    </select>
+                    <input type="date" name="data" id="data_cadastro" required />
                 </div>
-                <div class="form-row">
-                    <input type="text" name="diagnostico" placeholder="Diagnóstico" required>
-                    <input type="text" name="tratamento" placeholder="Tratamento" required>
-                </div>
-                <div class="form-row">
-                    <input type="text" name="nome_funcionario_cadastrante" placeholder="Cadastrante" required>
-                    <input type="text" name="data" placeholder="Data" required>
-                </div>
-                <hr>
-                <div class="form-actions">
-                    <button type="button" class="btn-cancelar">Cancelar</button>
-                    <button type="submit" class="btn-adicionar">Adicionar</button>
-                </div>
-            </form>
+
+            <hr />
+            <div class="form-actions">
+                <button type="button" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-adicionar">Adicionar</button>
+            </div>
+                 </form>
+            </div>
+        </dialog>
+
+    <!-- Modal Editar -->
+<dialog class="modal-editar">
+    <div class="modal-header">Editar Atendimento</div>
+    <div class="modal-body">
+        <form class="form-editar">
+            <div class="form-row">
+                <input type="text" name="nome_paciente" placeholder="Paciente" required />
+                <select name="id_veterinario" required>
+                    <option value="">Selecione o veterinário</option>
+                    <!-- opções preenchidas dinamicamente -->
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="text" name="diagnostico" placeholder="Diagnóstico" required />
+                <input type="text" name="tratamento" placeholder="Tratamento" required />
+            </div>
+            <div class="form-row">
+                <select name="id_funcionario" required>
+                    <option value="">Selecione o cadastrante</option>
+                    <!-- opções preenchidas dinamicamente -->
+                </select>
+                <input type="date" name="data" id="data_edicao" required />
+            </div>
+            <hr />
+            <div class="form-actions">
+                <button type="button" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-adicionar">Editar</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+
+    <!-- Modal de Exclusão -->
+<dialog class="modal-excluir">
+    <div class="modal-header">AVISO</div>
+    <div class="modal-body">
+        <p>Tem certeza que deseja excluir este atendimento?</p>
+        <div class="form-actions">
+            <button class="btn-cancelar-excluir">Não</button>
+            <button class="btn-confirmar-excluir">Sim</button>
         </div>
-    </dialog>
+    </div>
+</dialog>
+
     <script src="atendimentos.js"></script>
     <script src="cadastrarAtendimento.js"></script>
+    <script src="editarAtendimento.js"></script>
+    <script src="excluir.js"></script>
 </body>
 </html>
