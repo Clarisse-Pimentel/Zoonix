@@ -4,9 +4,14 @@ const btnCancelar = document.querySelector('.btn-cancelar');
 const form = document.querySelector('.form-cadastro');
 
 btnNovoAtendimento.addEventListener('click', () => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    if (!usuario || (usuario.tipo !== 'administrador' && usuario.tipo !== 'veterinario')) {
+        alert('Apenas administradores ou veterinários podem cadastrar atendimentos.');
+        return;
+    }
     modal.showModal();
-    carregarSelect('funcionarios/veterinarios', 'id_veterinario');
-    carregarSelect('funcionarios', 'id_funcionario');
+    carregarSelect('funcionarios/veterinarios', 'id_veterinario', form);
+    carregarSelect('funcionarios', 'id_funcionario', form);
 
     const campoData = form.querySelector('input[name="data"]');
     const hoje = new Date().toISOString().split('T')[0];
@@ -52,7 +57,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-async function carregarSelect(nomeTabela, selectName) {
+async function carregarSelect(nomeTabela, selectName, formScope = document) {
     try {
         const token = localStorage.getItem('token');
         const resposta = await fetch(`http://localhost:3000/${nomeTabela}`, {
@@ -74,7 +79,8 @@ async function carregarSelect(nomeTabela, selectName) {
             return;
         }
 
-        const select = document.querySelector(`select[name="${selectName}"]`);
+        // Busca o select dentro do formulário correto
+        const select = formScope.querySelector(`select[name="${selectName}"]`);
         let textoPadrao = "Selecione...";
 
         if (selectName === "id_veterinario") textoPadrao = "Selecione o veterinário";
@@ -83,7 +89,6 @@ async function carregarSelect(nomeTabela, selectName) {
         select.innerHTML = `<option value="">${textoPadrao}</option>`;
 
         lista.forEach(item => {
-            // Para veterinários, normalmente o id é id_funcionarios
             const value = item.id_funcionarios || item.id;
             select.innerHTML += `<option value="${value}">${item.nome}</option>`;
         });

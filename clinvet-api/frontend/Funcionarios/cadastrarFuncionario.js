@@ -38,7 +38,7 @@ form.telefone.addEventListener('input', () => {
 });
 
 function verificarCargo() {
-    const cargoValor = form.cargo.value.trim().toLowerCase();
+    const cargoValor = form.cargo.value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (cargoValor === 'veterinario') {
         inputCrmv.disabled = false;
         inputEspecialidade.disabled = false;
