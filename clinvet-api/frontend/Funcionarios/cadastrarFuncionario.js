@@ -70,7 +70,7 @@ form.addEventListener('submit', async (e) => {
 
     const funcionario = {
         nome: form.nome.value.trim(),
-        cpf: form.cpf.value.trim(),
+        cpf: form.cpf.value.replace(/\D/g, ''),
         cargo: form.cargo.value,
         crmv: form.crmv.value.trim(),
         especialidade: form.especialidade.value.trim(),

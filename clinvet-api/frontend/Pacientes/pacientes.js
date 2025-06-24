@@ -27,8 +27,8 @@ pacientes.forEach(p => {
     <td>${p.nome}</td>
     <td>${p.raca || '-'}</td>
     <td>${p.especie}</td>
-    <td>${p.sexo}</td>
-    <td>${p.idade || '-'}</td>
+    <td>${p.sexo === 'M' ? 'Macho' : p.sexo === 'F' ? 'Fêmea' : '-'}</td>
+    <td>${p.idade ? p.idade + ' anos' : '-'}</td>
     <td>${p.tutor}</td>
     <td>${p.telefone_tutor || '-'}</td>
     <td>

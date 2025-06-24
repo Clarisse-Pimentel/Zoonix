@@ -3,13 +3,19 @@ import {db} from '../db.js';
 export const listarAtendimentos = async (req, res) => {
   try {
     const [results] = await db.query(`
-    SELECT a.id, p.nome AS nome_paciente, v.id_funcionarios AS id_veterinario, 
-        f.nome AS funcionario_cadastrante, a.diagnostico, a.tratamento, a.data
-    FROM atendimentos a
-    JOIN pacientes p ON a.id_pacientes = p.id
-    JOIN funcionarios f ON a.id_funcionarios = f.id
-    JOIN veterinarios v ON a.id_veterinario = v.id_funcionarios
-        `);
+      SELECT a.id,
+             p.nome AS nome_paciente,
+             f.nome AS funcionario_cadastrante,
+             fv.nome AS nome_veterinario,
+             a.diagnostico,
+             a.tratamento,
+             a.data
+      FROM atendimentos a
+      JOIN pacientes p ON a.id_pacientes = p.id
+      JOIN funcionarios f ON a.id_funcionarios = f.id
+      JOIN veterinarios v ON a.id_veterinario = v.id_funcionarios
+      JOIN funcionarios fv ON v.id_funcionarios = fv.id
+    `);
     res.json(results);
   } catch (err) {
     console.error('Erro ao buscar atendimentos:', err);
@@ -17,41 +23,33 @@ export const listarAtendimentos = async (req, res) => {
   }
 };
 
-export const cadastrarAtendimento = async (req, res) => {
-  const { nome_paciente, nome_veterinario, diagnostico, tratamento, nome_funcionario_cadastrante, data } = req.body;
 
-  if (!nome_paciente || !nome_veterinario || !diagnostico || !tratamento || !nome_funcionario_cadastrante || !data) {
+export const cadastrarAtendimento = async (req, res) => {
+  const { nome_paciente, id_veterinario, diagnostico, tratamento, id_funcionario, data } = req.body;
+
+  if (!nome_paciente || !id_veterinario || !diagnostico || !tratamento || !id_funcionario || !data) {
     return res.status(400).send('Preencha todos os campos obrigatórios.');
   }
 
   try {
+    // Busca o paciente
     const [paciente] = await db.query('SELECT id FROM pacientes WHERE nome = ?', [nome_paciente]);
-    if (paciente.length === 0) {
-      return res.status(404).send('Paciente não encontrado.');
-    }
+    if (paciente.length === 0) return res.status(404).send('Paciente não encontrado.');
     const id_pacientes = paciente[0].id;
 
-    const [veterinario] = await db.query(`
-      SELECT v.id_funcionarios FROM veterinarios v
-      JOIN funcionarios f ON v.id_funcionarios = f.id
-      WHERE f.nome = ?
-    `, [nome_veterinario]);
-    if (veterinario.length === 0) {
-      return res.status(404).send('Veterinário não encontrado.');
-    }
-    const id_veterinario = veterinario[0].id_funcionarios;
+    // Aqui já recebe os IDs do frontend
+    // Adiciona o horário atual de Brasília à data recebida
+    const agora = new Date();
+    const horaBrasilia = new Date(agora.getTime() - (3 * 60 * 60 * 1000));
+    const horaAtual = horaBrasilia.toTimeString().slice(0, 8);
+    const dataComHora = `${data} ${horaAtual}`;
 
-    const [funcionario] = await db.query('SELECT id FROM funcionarios WHERE nome = ?', [nome_funcionario_cadastrante]);
-    if (funcionario.length === 0) {
-      return res.status(404).send('Funcionário não encontrado.');
-    }
-    const id_funcionarios = funcionario[0].id;
-
-    const dataFormatada = new Date(data).toISOString().slice(0, 19).replace('T', ' ');
     await db.query(`
-        INSERT INTO atendimentos (id_pacientes, id_funcionarios, id_veterinario, diagnostico, tratamento, data)
-        VALUES (?, ?, ?, ?, ?, ?)
-        `, [id_pacientes, id_funcionarios, id_veterinario, diagnostico, tratamento, dataFormatada]);
+      INSERT INTO atendimentos (id_pacientes, id_funcionarios, id_veterinario, data, tratamento, diagnostico)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [id_pacientes, id_funcionario, id_veterinario, dataComHora, tratamento, diagnostico]
+    );
+
     res.status(201).send('Atendimento cadastrado com sucesso!');
   } catch (err) {
     console.error('Erro ao cadastrar atendimento:', err);
@@ -59,51 +57,41 @@ export const cadastrarAtendimento = async (req, res) => {
   }
 };
 
+
 export const atualizarAtendimento = async (req, res) => {
-    const { id } = req.params;
-    const { nome_paciente, nome_veterinario, diagnostico, tratamento, nome_funcionario_cadastrante, data } = req.body;
-    if (!nome_paciente || !nome_veterinario || !diagnostico || !tratamento || !nome_funcionario_cadastrante || !data) {
-      return res.status(400).send('Preencha todos os campos obrigatórios.');
-    }
+  const { id } = req.params;
+  const { nome_paciente, id_veterinario, diagnostico, tratamento, id_funcionario, data } = req.body;
 
-    try {
-        const [paciente] = await db.query('SELECT id FROM pacientes WHERE nome = ?', [nome_paciente]);
-        if (paciente.length === 0) {
-            return res.status(404).send('Paciente não encontrado.');
-        }
-        const id_pacientes = paciente[0].id;
+  if (!nome_paciente || !id_veterinario || !diagnostico || !tratamento || !id_funcionario || !data) {
+    return res.status(400).send('Preencha todos os campos obrigatórios.');
+  }
 
-        const [veterinario] = await db.query(`
-            SELECT v.id_funcionarios FROM veterinarios v
-            JOIN funcionarios f ON v.id_funcionarios = f.id
-            WHERE f.nome = ?
-        `, [nome_veterinario]);
-        if (veterinario.length === 0) {
-            return res.status(404).send('Veterinário não encontrado.');
-        }
-        const id_veterinario = veterinario[0].id_funcionarios;
+  try {
+    // Busca o paciente
+    const [paciente] = await db.query('SELECT id FROM pacientes WHERE nome = ?', [nome_paciente]);
+    if (paciente.length === 0) return res.status(404).send('Paciente não encontrado.');
+    const id_pacientes = paciente[0].id;
 
-        const [funcionario] = await db.query('SELECT id FROM funcionarios WHERE nome = ?', [nome_funcionario_cadastrante]);
-        if (funcionario.length === 0) {
-            return res.status(404).send('Funcionário não encontrado.');
-        }
-        const id_funcionarios = funcionario[0].id;
+    // Aqui já recebe os IDs do frontend (como no cadastro)
+    // Adiciona o horário atual de Brasília à data recebida
+    const agora = new Date();
+    const horaBrasilia = new Date(agora.getTime() - (3 * 60 * 60 * 1000));
+    const horaAtual = horaBrasilia.toTimeString().slice(0, 8);
+    const dataComHora = `${data} ${horaAtual}`;
 
-        const dataFormatada = new Date(data).toISOString().slice(0, 19).replace('T', ' ');
-        const [result] = await db.query(`
-            UPDATE atendimentos
-            SET id_pacientes = ?, id_funcionarios = ?, id_veterinario = ?, diagnostico = ?, tratamento = ?, data = ?
-            WHERE id = ?
-        `, [id_pacientes, id_funcionarios, id_veterinario, diagnostico, tratamento, dataFormatada, id]);
-        if (result.affectedRows === 0) {
-            return res.status(404).send('Atendimento não encontrado para atualização.');
-        }
-        res.status(200).send('Atendimento atualizado com sucesso!');
-    } catch (err) {
-        console.error('Erro ao atualizar atendimento:', err);
-        res.status(500).send('Erro ao atualizar atendimento.');
-    }
+    await db.query(`
+      UPDATE atendimentos
+      SET id_pacientes = ?, id_funcionarios = ?, id_veterinario = ?, data = ?, tratamento = ?, diagnostico = ?
+      WHERE id = ?
+    `, [id_pacientes, id_funcionario, id_veterinario, dataComHora, tratamento, diagnostico, id]);
+
+    res.send('Atendimento atualizado com sucesso!');
+  } catch (err) {
+    console.error('Erro ao atualizar atendimento:', err);
+    res.status(500).send('Erro ao atualizar atendimento.');
+  }
 };
+
 
 export const deletarAtendimento = async (req, res) => {
   const { id } = req.params;

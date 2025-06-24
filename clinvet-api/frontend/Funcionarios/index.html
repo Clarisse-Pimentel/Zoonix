@@ -59,7 +59,8 @@
             <form class="form-cadastro">
                 <div class="form-row">
                     <input type="text" name="nome" placeholder="Nome" required>
-                    <input type="text" name="cpf" placeholder="CPF" required pattern="\d{11}" maxlength="14" title="Digite exatamente 11 dígitos numéricos">
+                    <input type="text" name="cpf" placeholder="CPF" required maxlength="14"
+                        pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" title="Digite um CPF válido, com 11 dígitos">
                     <select name="cargo" required>
                     <option value="">Cargo</option>
                     <option value="veterinario">Veterinário</option>
