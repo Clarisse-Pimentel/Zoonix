@@ -7,8 +7,10 @@ let atendimentoIdEditar = null;
 async function abrirModalEditar(atendimento) {
   atendimentoIdEditar = atendimento.id;
 
-  carregarSelect('funcionarios/veterinarios', 'id_veterinario');
-  carregarSelect('funcionarios', 'id_funcionario');
+  modalEditar.showModal();
+
+  await carregarSelect('funcionarios/veterinarios', 'id_veterinario', formEditar);
+  await carregarSelect('funcionarios', 'id_funcionario', formEditar);
 
   // Limpa os selects (opcional, para garantir)
   formEditar.id_veterinario.value = '';
@@ -104,7 +106,7 @@ document.addEventListener('click', async (e) => {
 });
 
 // Função para carregar opções dos selects
-async function carregarSelect(nomeTabela, selectName) {
+async function carregarSelect(nomeTabela, selectName, formScope = formEditar) {
     try {
         const token = localStorage.getItem('token');
         const resposta = await fetch(`http://localhost:3000/${nomeTabela}`, {
@@ -127,7 +129,7 @@ async function carregarSelect(nomeTabela, selectName) {
             return;
         }
 
-        const select = document.querySelector(`select[name="${selectName}"]`);
+        const select = formScope.querySelector(`select[name="${selectName}"]`);
         console.log('Select encontrado:', select);
         let textoPadrao = "Selecione...";
 

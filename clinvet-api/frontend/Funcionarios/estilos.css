@@ -284,11 +284,6 @@ dialog::backdrop {
     font-family: 'Poppins', sans-serif;
 }
 
-.form-row input[name="cargo"],
-.form-row input[name="senha"] {
-    flex: 0.5;
-}
-
 .form-actions {
     display: flex;
     justify-content: flex-end;

@@ -47,7 +47,7 @@
                 </tr>
             </thead>
             <tbody id="funcionariosTableBody">
-            <!-- Funcionários serão incluídos aqui -->
+                <!-- Funcionários serão incluídos aqui -->
             </tbody>
         </table>
     </main>
@@ -61,12 +61,7 @@
                     <input type="text" name="nome" placeholder="Nome" required>
                     <input type="text" name="cpf" placeholder="CPF" required maxlength="14"
                         pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" title="Digite um CPF válido, com 11 dígitos">
-                    <select name="cargo" required>
-                    <option value="">Cargo</option>
-                    <option value="veterinario">Veterinário</option>
-                    <option value="administrador">Administrador</option>
-                    <option value="outro">Outro</option>
-                </select>
+                    <input list="lista-cargos" name="cargo" placeholder="Cargo" required>
                 </div>
                 <div class="form-row">
                     <input type="text" name="crmv" placeholder="CRMV">
@@ -87,19 +82,14 @@
     </dialog>
 
     <!-- Modal de Edição -->
-    <dialog class="modal-editar" >
+    <dialog class="modal-editar">
         <div class="modal-header">Editar Funcionário</div>
         <div class="modal-body">
             <form class="form-edicao">
                 <div class="form-row">
                     <input type="text" name="nome" placeholder="Nome" required>
                     <input type="text" name="cpf" placeholder="CPF" required>
-                    <select name="cargo" required>
-                        <option value="">Cargo</option>
-                        <option value="veterinario">Veterinário</option>
-                        <option value="administrador">Administrador</option>
-                        <option value="outro">Outro</option>
-                    </select>
+                    <input list="lista-cargos" name="cargo" placeholder="Cargo" required>
                 </div>
                 <div class="form-row">
                     <input type="text" name="crmv" placeholder="CRMV">
@@ -119,17 +109,26 @@
         </div>
     </dialog>
 
-<!-- Modal de Exclusão -->
+    <!-- Modal de Exclusão -->
     <dialog class="modal-excluir">
         <div class="modal-header">AVISO</div>
         <div class="modal-body">
             <p>Tem certeza que deseja excluir este funcionário?</p>
-        <div class="form-actions">
-            <button class="btn-cancelar-excluir">Não</button>
-        <button class="btn-confirmar-excluir">Sim</button>
-        </div>
+            <div class="form-actions">
+                <button class="btn-cancelar-excluir">Não</button>
+                <button class="btn-confirmar-excluir">Sim</button>
+            </div>
         </div>
     </dialog>
+
+    <!-- Lista de cargos sugeridos -->
+    <datalist id="lista-cargos">
+        <option value="Veterinário">
+        <option value="Administrador">
+        <option value="Recepcionista">
+        <option value="Auxiliar de Veterinário">
+        <option value="Estagiário">
+    </datalist>
 
     <script src="funcionarios.js"></script>
     <script src="cadastrarFuncionario.js"></script>
@@ -137,4 +136,3 @@
     <script src="excluir.js"></script>
 </body>
 </html>
-
