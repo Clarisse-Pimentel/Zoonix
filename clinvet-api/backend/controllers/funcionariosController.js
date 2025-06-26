@@ -109,25 +109,24 @@ export const cadastrarFuncionario = async (req, res) => {
     }
 
     try {
-            // Verifica se o CPF já existe
+            // Verifica se o CPF já existe em outro funcionário
     const [cpfExistente] = await db.query(
-      'SELECT id FROM funcionarios WHERE cpf = ?',
-      [cpf]
+      'SELECT id FROM funcionarios WHERE cpf = ? AND id <> ?',
+      [cpf, id]
     );
     if (cpfExistente.length > 0) {
       return res.status(409).send('CPF já cadastrado.');
     }
 
-    // Verifica se o telefone já existe
+    // Verifica se o telefone já existe em outro funcionário ou paciente
     const [pacienteTelefoneExistente] = await db.query(
       'SELECT id FROM pacientes WHERE telefone_tutor = ?',
       [telefone]
     );
 
-    
     const [funcionarioTelefoneExistente] = await db.query(
-      'SELECT id FROM funcionarios WHERE telefone = ?',
-      [telefone_tutor]
+      'SELECT id FROM funcionarios WHERE telefone = ? AND id <> ?',
+      [telefone, id]
     );
 
     if (pacienteTelefoneExistente.length > 0 || funcionarioTelefoneExistente.length > 0) {
