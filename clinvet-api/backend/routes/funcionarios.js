@@ -14,13 +14,13 @@ import { permitirAcesso } from '../middleware/permissao.js';
 const router = express.Router();
 
 // Todas as rotas de funcionários exigem: usuário autenticado + cargo admin
-router.use(authMiddleware, permitirAcesso(['administrador']));
 
-router.get('/', listarFuncionarios);
+
+router.get('/veterinarios', authMiddleware, permitirAcesso(['administrador', 'veterinario']), listarVeterinarios);
+router.get('/', authMiddleware, permitirAcesso(['administrador', 'veterinario']), listarFuncionarios);
 router.post('/', cadastrarFuncionario);
 router.put('/:id', atualizarFuncionario);
 router.delete('/:id', deletarFuncionario);
-router.get('/veterinarios', listarVeterinarios);
 router.get('/:id', buscarFuncionarioPorId);
 
 

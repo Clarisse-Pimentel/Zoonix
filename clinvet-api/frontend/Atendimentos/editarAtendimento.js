@@ -6,6 +6,7 @@ let atendimentoIdEditar = null;
 // Função para abrir a modal de edição e preparar os campos (igual ao cadastro)
 async function abrirModalEditar(atendimento) {
   atendimentoIdEditar = atendimento.id;
+  
 
   modalEditar.showModal();
 
@@ -65,9 +66,13 @@ formEditar.addEventListener('submit', async (e) => {
   };
 
   try {
+    const token = localStorage.getItem('token');
     const resposta = await fetch(`http://localhost:3000/atendimentos/${atendimentoIdEditar}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify(atendimento)
     });
 
@@ -94,8 +99,15 @@ document.addEventListener('click', async (e) => {
     const id = btn.dataset.id;
     if (!id) return;
 
+    console.log('Buscando atendimento id:', id);
+
     try {
-      const resposta = await fetch(`http://localhost:3000/atendimentos/${id}`);
+      const token = localStorage.getItem('token');
+      const resposta = await fetch(`http://localhost:3000/atendimentos/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!resposta.ok) throw new Error('Atendimento não encontrado');
       const atendimento = await resposta.json();
       abrirModalEditar(atendimento);

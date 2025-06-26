@@ -10,36 +10,30 @@ const inputCpf = form.cpf;
 const inputTelefone = form.telefone;
 
 // Aplica máscara de CPF em tempo real
-form.cpf.addEventListener('input', () => {
-    let cpf = form.cpf.value.replace(/\D/g, '');
-
+inputCpf.addEventListener('input', () => {
+    let cpf = inputCpf.value.replace(/\D/g, '');
     if (cpf.length > 11) cpf = cpf.slice(0, 11);
-
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
     cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-    form.cpf.value = cpf;
+    inputCpf.value = cpf;
 });
 
 // Aplica máscara de telefone em tempo real
-form.telefone.addEventListener('input', () => {
-    let tel = form.telefone.value.replace(/\D/g, '');
-
+inputTelefone.addEventListener('input', () => {
+    let tel = inputTelefone.value.replace(/\D/g, '');
     if (tel.length > 11) tel = tel.slice(0, 11);
-
-    if (tel.length <= 10) {
-        tel = tel.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else {
-        tel = tel.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-    }
-
-    form.telefone.value = tel;
+    tel = tel.length <= 10
+        ? tel.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+        : tel.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    inputTelefone.value = tel;
 });
 
+// Habilita/desabilita campos conforme cargo
 function verificarCargo() {
-    const cargoValor = form.cargo.value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    if (cargoValor === 'veterinario') {
+    const cargo = selectCargo.value;
+
+    if (cargo === 'veterinario') {
         inputCrmv.disabled = false;
         inputEspecialidade.disabled = false;
     } else {
@@ -53,47 +47,81 @@ function verificarCargo() {
 btnNovoFuncionario.addEventListener('click', () => {
     modal.showModal();
     verificarCargo();
+    verificarOutroCargo();
 });
 
 btnCancelar.addEventListener('click', () => {
     modal.close();
     form.reset();
     verificarCargo();
+    verificarOutroCargo(); 
 });
 
-selectCargo.addEventListener('change', verificarCargo);
+selectCargo.addEventListener('change', () => {
+    verificarCargo();
+    verificarOutroCargo(); 
+});
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-
-
-    const funcionario = {
-        nome: form.nome.value.trim(),
-        cpf: form.cpf.value.replace(/\D/g, ''),
-        cargo: form.cargo.value,
-        crmv: form.crmv.value.trim(),
-        especialidade: form.especialidade.value.trim(),
-        telefone: form.telefone.value.trim(),
-        email: form.email.value.trim(),
-        senha: form.senha.value.trim()
-    };
-
     const token = localStorage.getItem('token');
-
     if (!token) {
         alert('Você não está autenticada. Faça login novamente.');
         return;
     }
 
+    const cargo = selectCargo.value;
+
+    const funcionario = {
+        nome: form.nome.value.trim(),
+        cpf: inputCpf.value.replace(/\D/g, ''),
+        telefone: inputTelefone.value.trim(),
+        email: form.email.value.trim(),
+        senha: form.senha.value.trim()
+    };
+
+    let endpoint = '';
+    let body = {};
+
+    switch (cargo) {
+        case 'veterinario':
+            endpoint = 'http://localhost:3000/funcionarios'; 
+            body = {
+                ...funcionario,
+            cargo: 'veterinario', 
+            crmv: form.crmv.value.trim(),
+            especialidade: form.especialidade.value.trim()
+    };
+    break;
+        case 'administrador':
+            endpoint = 'http://localhost:3000/funcionarios';
+            body = funcionario;
+            break;
+        case 'outro':
+            endpoint = 'http://localhost:3000/funcionarios';
+            body = {
+                ...funcionario,
+                cargo: form.cargoPersonalizado.value.trim() // pega o valor digitado
+            };
+            if (!body.cargo) {
+                alert('Digite o nome do cargo.');
+                return;
+            }
+            break;
+        default:
+            alert('Cargo inválido selecionado.');
+            return;
+    }
+
     try {
-        const resposta = await fetch('http://localhost:3000/funcionarios', {
+        const resposta = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(funcionario)
+            body: JSON.stringify(body)
         });
 
         if (!resposta.ok) {

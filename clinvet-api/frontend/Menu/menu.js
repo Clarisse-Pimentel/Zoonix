@@ -1,5 +1,3 @@
-// menu.js
-
 document.addEventListener('DOMContentLoaded', () => {
   const sidebarLinks = document.querySelectorAll('.sidebar nav ul li a');
 
@@ -10,16 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const destino = link.getAttribute('href');
       const textoLink = link.textContent.trim().toLowerCase();
 
-      if (textoLink === 'funcionários') {
-        const ehAdministrador = localStorage.getItem('administrador') === 'true';
+      const cargo = localStorage.getItem('cargo');
 
-        if (!ehAdministrador) {
-          alert('Acesso negado. Apenas administradores podem acessar a página Funcionários.');
-          return; // bloqueia o acesso
-        }
+      if (textoLink === 'funcionários' && cargo !== 'administrador') {
+        alert('Acesso negado. Apenas administradores podem acessar a página Funcionários.');
+        return; // bloqueia o acesso
       }
 
       window.location.href = destino;
     });
   });
 });
+

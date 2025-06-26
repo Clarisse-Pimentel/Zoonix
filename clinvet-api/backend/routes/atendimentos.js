@@ -12,11 +12,11 @@ import { permitirAcesso } from '../middleware/permissao.js';
 
 const router = express.Router();
 router.get('/', listarAtendimentos);
-router.post('/', cadastrarAtendimento);
-// Apenas administradores e veterinários podem editar os dados dos atendimentos.
-router.put('/:id', authMiddleware, permitirAcesso(['administrador', 'veterinario']), atualizarAtendimento);
-router.delete('/:id', deletarAtendimento);
-router.get('/:id', buscarAtendimentoPorId);
+router.post('/', authMiddleware,permitirAcesso(['administrador', 'veterinario']), cadastrarAtendimento);
+// Apenas  veterinários podem editar os dados dos atendimentos.
+router.put('/:id', authMiddleware, permitirAcesso(['veterinario']), atualizarAtendimento);
+router.delete('/:id', authMiddleware, permitirAcesso(['administrador', 'veterinario']), deletarAtendimento);
+router.get('/:id', authMiddleware, permitirAcesso(['administrador', 'veterinario']), buscarAtendimentoPorId);
 
 export default router;
-// O código acima define as rotas para gerenciar atendimentos na aplicação.
+

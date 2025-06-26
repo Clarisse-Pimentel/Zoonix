@@ -5,7 +5,7 @@ const form = document.querySelector('.form-cadastro');
 
 btnNovoAtendimento.addEventListener('click', () => {
     const usuario = JSON.parse(localStorage.getItem('usuario'));
-    if (!usuario || (usuario.tipo !== 'administrador' && usuario.tipo !== 'veterinario')) {
+    if (!usuario || (usuario.cargo !== 'administrador' && usuario.cargo !== 'veterinario')) {
         alert('Apenas administradores ou veterinários podem cadastrar atendimentos.');
         return;
     }
@@ -36,9 +36,13 @@ form.addEventListener('submit', async (e) => {
     };
 
     try {
+        const token = localStorage.getItem('token');
         const resposta = await fetch('http://localhost:3000/atendimentos', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             body: JSON.stringify(atendimento)
         });
 
@@ -60,16 +64,20 @@ form.addEventListener('submit', async (e) => {
 async function carregarSelect(nomeTabela, selectName, formScope = document) {
     try {
         const token = localStorage.getItem('token');
+        console.log('Token atual:', token);
         const resposta = await fetch(`http://localhost:3000/${nomeTabela}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
 
+        if (resposta.status === 403 || resposta.status === 401) {
+            alert('Você não tem permissão para acessar esta informação.');
+        return;
+        }
         if (!resposta.ok) {
-            alert('Sessão expirada. Faça login novamente.');
-            window.location.href = '../Login/login.html';
-            return;
+            alert(`Erro ao carregar ${selectName}: ${resposta.statusText}`);
+        return;
         }
 
         const lista = await resposta.json();

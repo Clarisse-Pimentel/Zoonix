@@ -186,6 +186,28 @@ header h2 {
 }
 
 /* Reset básico */
+.usuario-logado {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    background-color: #253db6;
+    border-radius: 8px;
+}
+
+.usuario-logado .fa-user-circle {
+    font-size: 1.8rem;
+}
+
+.usuario-logado .info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
 * {
     margin: 0;
     padding: 0;

@@ -30,27 +30,32 @@ btnCancelarExcluir.addEventListener('click', () => {
 btnConfirmarExcluir.addEventListener('click', async () => {
   if (!atendimentoIdExcluir) return;
 
+  console.log('Tentando excluir atendimento id:', atendimentoIdExcluir);
+
   try {
-    const usuario = JSON.parse(localStorage.getItem('usuario')); // ou obtenha o nome/id do usuário logado
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const token = localStorage.getItem('token');
 
     const resposta = await fetch(`http://localhost:3000/atendimentos/${atendimentoIdExcluir}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        usuarioResponsavel: usuario?.nome // ou usuario.id, conforme o backend espera
+        usuarioResponsavel: usuario?.id
       })
     });
 
     if (!resposta.ok) {
-      alert('Erro ao excluir o atendimento.');
+      const erro = await resposta.text();
+      alert('Erro ao excluir o atendimento: ' + erro);
       return;
     }
 
     alert('Atendimento excluído com sucesso!');
     modalExcluir.close();
-    carregarAtendimentos(); // Atualiza a lista de atendimentos
+    carregarAtendimentos();
     atendimentoIdExcluir = null;
   } catch (error) {
     alert('Erro na conexão: ' + error.message);

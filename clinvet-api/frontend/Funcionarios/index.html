@@ -61,7 +61,18 @@
                     <input type="text" name="nome" placeholder="Nome" required>
                     <input type="text" name="cpf" placeholder="CPF" required maxlength="14"
                         pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" title="Digite um CPF válido, com 11 dígitos">
-                    <input list="lista-cargos" name="cargo" placeholder="Cargo" required>
+                        </div>
+                <div class="form-row">
+                            <select id="cargo" name="cargo" onchange="verificarOutroCargo()" required>
+                                <option value="">Selecione um cargo</option>
+                                <option value="veterinario">Veterinário</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="outro">Outro</option>
+                            </select>
+
+                            <div id="campoOutroCargo" style="display: none;">
+                                <input type="text" id="cargoPersonalizado" name="cargoPersonalizado" placeholder="Digite o nome do cargo" />
+                            </div>
                 </div>
                 <div class="form-row">
                     <input type="text" name="crmv" placeholder="CRMV">
@@ -89,7 +100,18 @@
                 <div class="form-row">
                     <input type="text" name="nome" placeholder="Nome" required>
                     <input type="text" name="cpf" placeholder="CPF" required>
-                    <input list="lista-cargos" name="cargo" placeholder="Cargo" required>
+                    </div>
+                <div class="form-row">
+                            <select id="cargoEditar" name="cargo" onchange="verificarOutroCargoEditar()" required>
+                                <option value="">Selecione um cargo</option>
+                                <option value="veterinario">Veterinário</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="outro">Outro</option>
+                            </select>
+
+                            <div id="campoOutroCargoEditar" style="display: none;">
+                                <input type="text" id="cargoPersonalizadoEditar" name="cargoPersonalizadoEditar" placeholder="Digite o nome do cargo" />
+                            </div>
                 </div>
                 <div class="form-row">
                     <input type="text" name="crmv" placeholder="CRMV">
@@ -98,7 +120,7 @@
                 <div class="form-row">
                     <input type="text" name="telefone" placeholder="Telefone" required>
                     <input type="text" name="email" placeholder="E-mail" required>
-                    <input type="text" name="senha" placeholder="Senha" required>
+                    <input type="text" name="senha" placeholder="Senha">
                 </div>
                 <hr>
                 <div class="form-actions">
@@ -121,14 +143,7 @@
         </div>
     </dialog>
 
-    <!-- Lista de cargos sugeridos -->
-    <datalist id="lista-cargos">
-        <option value="Veterinário">
-        <option value="Administrador">
-        <option value="Recepcionista">
-        <option value="Auxiliar de Veterinário">
-        <option value="Estagiário">
-    </datalist>
+
 
     <script src="funcionarios.js"></script>
     <script src="cadastrarFuncionario.js"></script>

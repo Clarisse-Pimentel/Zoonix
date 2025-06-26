@@ -115,7 +115,7 @@ export const deletarAtendimento = async (req, res) => {
     }
 
     // Log de exclusão
-    const [funcionario] = await db.query('SELECT id FROM funcionarios WHERE nome = ?', [usuarioResponsavel]);
+    const [funcionario] = await db.query('SELECT id FROM funcionarios WHERE id = ?', [usuarioResponsavel]);
     if (funcionario.length === 0) {
     return res.status(404).send('Funcionário responsável não encontrado.');
     }
@@ -144,7 +144,7 @@ export const buscarAtendimentoPorId = async (req, res) => {
       FROM atendimentos a
       JOIN pacientes p ON a.id_pacientes = p.id
       JOIN funcionarios f ON a.id_funcionarios = f.id
-      JOIN veterinarios v ON a.id_veterinario = v.id_funcionarios
+      LEFT JOIN veterinarios v ON a.id_veterinario = v.id_funcionarios
       WHERE a.id = ?
     `, [id]);
 
