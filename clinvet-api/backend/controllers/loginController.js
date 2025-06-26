@@ -54,8 +54,31 @@ async function criarAdminInicial(cpf, senhaPadrao = 'admin123') {
   return false; // admin já existe
 }
 
+// Controle de tentativas de login (em memória)
+const tentativasLogin = {}; 
+const TEMPO_BLOQUEIO_MS = 5 * 60 * 1000; // 5 minutos
+
+// Função auxiliar para incrementar tentativas e bloquear se necessário
+function registrarTentativa(cpf, res, mensagem = 'CPF ou senha incorretos.') {
+  if (!tentativasLogin[cpf]) tentativasLogin[cpf] = { count: 0, bloqueadoAte: null };
+  tentativasLogin[cpf].count += 1;
+
+  if (tentativasLogin[cpf].count >= 3) {
+    tentativasLogin[cpf].bloqueadoAte = Date.now() + TEMPO_BLOQUEIO_MS;
+    return res.status(429).json({ mensagem: 'Muitas tentativas incorretas. Login bloqueado por 5 minutos.' });
+  }
+  return res.status(401).json({ mensagem });
+}
+
 export const login = async (req, res) => {
   const { cpf, senha } = req.body;
+
+  // Verifica bloqueio
+  const registro = tentativasLogin[cpf];
+  if (registro && registro.bloqueadoAte && Date.now() < registro.bloqueadoAte) {
+    const tempoRestante = Math.ceil((registro.bloqueadoAte - Date.now()) / 1000);
+    return res.status(429).json({ mensagem: `Login bloqueado. Tente novamente em ${tempoRestante} segundos.` });
+  }
 
   try {
     // Verifica se é o primeiro acesso
@@ -111,14 +134,14 @@ export const login = async (req, res) => {
     );
 
     if (usuarios.length === 0) {
-      return res.status(404).json({ mensagem: 'CPF não encontrado' });
+      return registrarTentativa(cpf, res, 'CPF não encontrado');
     }
 
     const usuario = usuarios[0];
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
     if (!senhaCorreta) {
-      return res.status(401).json({ mensagem: 'Senha incorreta' });
+      return registrarTentativa(cpf, res, 'Senha incorreta');
     }
 
     const [admins] = await db.execute(
@@ -141,6 +164,9 @@ export const login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
+    // Se login for bem-sucedido, reseta tentativas
+    if (tentativasLogin[cpf]) delete tentativasLogin[cpf];
+
     return res.status(200).json({
       mensagem: 'Login realizado com sucesso!',
       token,
@@ -152,7 +178,7 @@ export const login = async (req, res) => {
     });
 
   } catch (erro) {
-    console.error(erro);
-    return res.status(500).json({ mensagem: 'Erro interno no servidor' });
+    // Erros inesperados
+    return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 };
