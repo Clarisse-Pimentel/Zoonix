@@ -77,3 +77,4 @@ document.getElementById('searchButton')?.addEventListener('click', () => {
 });
 
 carregarAtendimentos();
+

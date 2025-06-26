@@ -29,19 +29,27 @@ async function criarAdminInicial(cpf, senhaPadrao = 'admin123') {
     const hash = await bcrypt.hash(senhaPadrao, 10);
     const cargo = 'administrador';
 
-    const [resultado] = await db.execute(
-      'INSERT INTO funcionarios (nome, cpf, cargo, senha) VALUES (?, ?, ?, ?)',
-      ['Administrador', cpf, cargo, hash]
-    );
+    try {
+      const [resultado] = await db.execute(
+        'INSERT INTO funcionarios (nome, cpf, cargo, senha) VALUES (?, ?, ?, ?)',
+        ['Administrador', cpf, cargo, hash]
+      );
+      console.log('Resultado do insert funcionarios:', resultado);
 
-    const novoId = resultado.insertId;
+      const novoId = resultado.insertId;
+      console.log('Novo ID do admin:', novoId);
 
-    await db.execute(
-      'INSERT INTO administradores (id_funcionarios) VALUES (?)',
-      [novoId]
-    );
+      await db.execute(
+        'INSERT INTO administradores (id_funcionarios) VALUES (?)',
+        [novoId]
+      );
+      console.log('Admin inserido na tabela administradores!');
 
-    return true; // avisar que criou admin
+      return true;
+    } catch (err) {
+      console.error('Erro ao criar admin inicial:', err);
+      return false;
+    }
   }
   return false; // admin já existe
 }
@@ -50,6 +58,17 @@ export const login = async (req, res) => {
   const { cpf, senha } = req.body;
 
   try {
+    // Verifica se é o primeiro acesso
+    const [todosFuncionarios] = await db.execute('SELECT * FROM funcionarios');
+
+    if (todosFuncionarios.length === 0) {
+      if (senha !== 'admin123') {
+        return res.status(401).json({
+          mensagem: 'Senha incorreta. No primeiro acesso, use a senha padrão: admin123.'
+        });
+      }
+    }
+
     // Tenta criar admin se nenhum funcionário existir
     const adminCriado = await criarAdminInicial(cpf);
 
@@ -67,7 +86,7 @@ export const login = async (req, res) => {
           id: usuario.id,
           nome: usuario.nome,
           cpf: usuario.cpf,
-          tipo: 'administrador'
+          cargo: 'administrador'
         },
         secret,
         { expiresIn: '1h' }
@@ -107,14 +126,16 @@ export const login = async (req, res) => {
       [usuario.id]
     );
 
-    const tipoUsuario = admins.length > 0 ? 'administrador' : usuario.cargo;
+    const tipoUsuario = admins.length > 0
+      ? 'administrador'
+      : (usuario.cargo || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
     const token = jwt.sign(
       {
         id: usuario.id,
         nome: usuario.nome,
         cpf: usuario.cpf,
-        tipo: tipoUsuario
+        cargo: tipoUsuario
       },
       secret,
       { expiresIn: '1h' }
@@ -126,7 +147,7 @@ export const login = async (req, res) => {
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
-        cargo: tipoUsuario
+        cargo: tipoUsuario 
       }
     });
 

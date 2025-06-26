@@ -15,12 +15,13 @@ export const listarFuncionarios = async (req, res) => {
 }; // talvez colocar o select com join para trazer os dados dos veterinários e administradores
 
 export const cadastrarFuncionario = async (req, res) => {
+  
     const { nome, cpf, cargo, telefone, email, senha } = req.body;
 
     if (!nome || !cpf || !cargo || !telefone || !email || !senha) {
         return res.status(400).send('Preencha todos os campos obrigatórios.');
     }
-    
+    console.log('CARGO RECEBIDO:', cargo);
  
     try {
       // Verifica se o CPF já existe
@@ -28,10 +29,26 @@ export const cadastrarFuncionario = async (req, res) => {
       'SELECT id FROM funcionarios WHERE cpf = ?',
       [cpf]
     );
-
     if (cpfExistente.length > 0) {
       return res.status(409).send('CPF já cadastrado.');
     }
+
+    // Verifica se o telefone já existe
+    const [pacienteTelefoneExistente] = await db.query(
+      'SELECT id FROM pacientes WHERE telefone_tutor = ?',
+      [telefone]
+    );
+
+    
+    const [funcionarioTelefoneExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE telefone = ?',
+      [telefone]
+    );
+
+    if (pacienteTelefoneExistente.length > 0 || funcionarioTelefoneExistente.length > 0) {
+      return res.status(409).send('Telefone já cadastrado.');
+    }
+    
 
       await db.beginTransaction();
 
@@ -42,16 +59,23 @@ export const cadastrarFuncionario = async (req, res) => {
         [nome, cpf, cargo, telefone, email, senhaCriptografada]
       );
 
-      /*const cargotipo = cargo.toLowerCase();
-
-      if (cargotipo === 'veterinário' || cargotipo === 'veterinária'|| cargotipo === 'veterinario'|| cargotipo === 'veterinaria') {
-      */
       if(cargo == 'veterinario')  {
       const { crmv, especialidade } = req.body;
         if (!crmv || !especialidade) {
           await db.rollback();
           return res.status(400).send('Preencha todos os campos obrigatórios para veterinários.');
         }
+        
+        const [crmvExistente] = await db.query(
+          'SELECT id_funcionarios FROM veterinarios WHERE crmv = ?',
+          [crmv]
+        );
+
+        if (crmvExistente.length > 0) {
+          await db.rollback();
+          return res.status(409).send('CRMV já cadastrado.');
+        }
+
         await db.query(
           'INSERT INTO veterinarios (id_funcionarios, crmv, especialidade) VALUES (?, ?, ?)',
           [result.insertId, crmv, especialidade]
@@ -80,11 +104,36 @@ export const cadastrarFuncionario = async (req, res) => {
   console.log('ID recebido para atualização:', id);
     const { nome, cpf, cargo, telefone, email, senha, crmv, especialidade } = req.body;
 
-    if (!nome || !cpf || !cargo || !telefone || !email || !senha) {
+    if (!nome || !cpf || !cargo || !telefone || !email) {
       return res.status(400).send('Preencha todos os campos obrigatórios.');
     }
 
     try {
+            // Verifica se o CPF já existe
+    const [cpfExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE cpf = ?',
+      [cpf]
+    );
+    if (cpfExistente.length > 0) {
+      return res.status(409).send('CPF já cadastrado.');
+    }
+
+    // Verifica se o telefone já existe
+    const [pacienteTelefoneExistente] = await db.query(
+      'SELECT id FROM pacientes WHERE telefone_tutor = ?',
+      [telefone]
+    );
+
+    
+    const [funcionarioTelefoneExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE telefone = ?',
+      [telefone_tutor]
+    );
+
+    if (pacienteTelefoneExistente.length > 0 || funcionarioTelefoneExistente.length > 0) {
+      return res.status(409).send('Telefone já cadastrado.');
+    }
+
       await db.beginTransaction();
 
       // Busca o cargo atual no banco de dados
@@ -101,10 +150,19 @@ export const cadastrarFuncionario = async (req, res) => {
       const senhaCriptografada = await bcrypt.hash(senha, 10);
 
       // Atualiza a tabela de funcionarios
-      await db.query(
-        'UPDATE funcionarios SET nome = ?, cpf = ?, cargo = ?, telefone = ?, email = ?, senha = ? WHERE id = ?',
-        [nome, cpf, cargo, telefone, email, senhaCriptografada, id]
-      );
+      let updateQuery = 'UPDATE funcionarios SET nome = ?, cpf = ?, cargo = ?, telefone = ?, email = ?';
+      let params = [nome, cpf, cargo, telefone, email];
+
+      if (senha && senha.trim() !== '') {
+        const senhaCriptografada = await bcrypt.hash(senha, 10);
+        updateQuery += ', senha = ?';
+        params.push(senhaCriptografada);
+      }
+
+      updateQuery += ' WHERE id = ?';
+      params.push(id);
+
+      await db.query(updateQuery, params);
 
       if (cargoAntigo !== cargo) {
         if(cargoAntigo === 'veterinario') {

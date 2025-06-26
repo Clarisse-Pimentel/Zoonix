@@ -16,6 +16,7 @@ export const cadastrarPaciente = async (req, res) => {
     return res.status(400).send('Preencha todos os campos obrigatórios.');
   }
 
+  
   const sql = `
     INSERT INTO pacientes (nome, raca, especie, sexo, idade, tutor, telefone_tutor)
     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -23,6 +24,20 @@ export const cadastrarPaciente = async (req, res) => {
   const values = [nome, raca, especie, sexo, idade, tutor, telefone_tutor];
 
   try {
+    const [pacienteTelefoneExistente] = await db.query(
+      'SELECT id FROM pacientes WHERE telefone_tutor = ?',
+      [telefone_tutor]
+    );
+
+    // Verifica se o telefone já existe em funcionarios
+    const [funcionarioTelefoneExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE telefone = ?',
+      [telefone_tutor]
+    );
+
+    if (pacienteTelefoneExistente.length > 0 || funcionarioTelefoneExistente.length > 0) {
+      return res.status(409).send('Telefone já cadastrado');
+    }
     await db.query(sql, values);
     res.status(201).send('Paciente cadastrado com sucesso!');
   } catch (err) {
@@ -34,20 +49,38 @@ export const atualizarPaciente = async (req, res) => {
   const { id } = req.params;
   const { nome, raca, especie, sexo, idade, tutor, telefone_tutor } = req.body;
 
-  const sql = `
-    UPDATE pacientes SET nome = ?, raca = ?, especie = ?, sexo = ?, idade = ?, tutor = ?, telefone_tutor = ?
-    WHERE id = ?
-  `;
-  const values = [nome, raca, especie, sexo, idade, tutor, telefone_tutor, id];
-
   try {
+    const [pacienteTelefoneExistente] = await db.query(
+      'SELECT id FROM pacientes WHERE telefone_tutor = ? AND id != ?',
+      [telefone_tutor, id]
+    );
+
+    
+    const [funcionarioTelefoneExistente] = await db.query(
+      'SELECT id FROM funcionarios WHERE telefone = ?',
+      [telefone_tutor]
+    );
+
+    if (pacienteTelefoneExistente.length > 0 || funcionarioTelefoneExistente.length > 0) {
+      return res.status(409).send('Telefone já cadastrado.');
+    }
+
+    const sql = `
+      UPDATE pacientes SET nome = ?, raca = ?, especie = ?, sexo = ?, idade = ?, tutor = ?, telefone_tutor = ?
+      WHERE id = ?
+    `;
+    const values = [nome, raca, especie, sexo, idade, tutor, telefone_tutor, id];
+
     const [result] = await db.query(sql, values);
     if (result.affectedRows === 0) return res.status(404).send('Paciente não encontrado.');
+    
     res.send('Paciente atualizado com sucesso!');
   } catch (err) {
+    console.error('Erro ao atualizar paciente:', err);
     res.status(500).send('Erro ao atualizar paciente.');
   }
 };
+
 
 export const deletarPaciente = async (req, res) => {
   const { id } = req.params;

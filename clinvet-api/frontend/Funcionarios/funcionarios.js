@@ -99,3 +99,23 @@ document.getElementById('searchInput').addEventListener('keydown', async (e) => 
     }
 });
 carregarFuncionarios();
+
+function verificarOutroCargo() {
+    const select = document.getElementById('cargo');
+    const campoOutro = document.getElementById('campoOutroCargo');
+    if (!select || !campoOutro) return;
+    if (select.value === 'Outro' || select.value === 'outro') {
+        campoOutro.style.display = 'block';
+    } else {
+        campoOutro.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const cargo = usuario?.cargo;
+    if (cargo !== 'administrador') {
+      alert('Acesso não autorizado.');
+      window.location.href = '../Menu/index.html'; 
+    }
+});

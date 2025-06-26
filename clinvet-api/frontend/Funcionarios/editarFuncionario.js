@@ -6,6 +6,10 @@ const selectCargoEditar = formEditar.cargo;
 const inputCrmvEditar = formEditar.crmv;
 const inputEspecialidadeEditar = formEditar.especialidade;
 
+// Adicione referências ao campo personalizado
+const campoOutroCargoEditar = document.getElementById('campoOutroCargoEditar');
+const inputCargoPersonalizadoEditar = document.getElementById('cargoPersonalizadoEditar');
+
 let FuncionarioIdEditar = null;
 
 // Função utilitária para normalizar textos (remover acentos, converter para minúsculo)
@@ -55,8 +59,21 @@ function verificarCargoEditar() {
     }
 }
 
+// Função para mostrar/esconder campo personalizado
+function verificarOutroCargoEditar() {
+    if (selectCargoEditar.value === 'outro') {
+        campoOutroCargoEditar.style.display = 'block';
+    } else {
+        campoOutroCargoEditar.style.display = 'none';
+        if (inputCargoPersonalizadoEditar) inputCargoPersonalizadoEditar.value = '';
+    }
+}
+
 // Verifica alterações no cargo
-selectCargoEditar.addEventListener('change', verificarCargoEditar);
+selectCargoEditar.addEventListener('change', () => {
+    verificarCargoEditar();
+    verificarOutroCargoEditar();
+});
 
 // Abrir modal de edição
 document.addEventListener('click', async (e) => {
@@ -78,8 +95,10 @@ document.addEventListener('click', async (e) => {
         }
 
         try {
+            const token = localStorage.getItem('token');
             const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdEditar}`, {
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
                 }
             });
@@ -98,8 +117,18 @@ document.addEventListener('click', async (e) => {
             formEditar.email.value = funcionario.email || '';
             formEditar.senha.value = '';
 
+            // Se não for veterinário nem administrador, marque "outro" e preencha o campo personalizado
+            if (
+                funcionario.cargo &&
+                funcionario.cargo !== 'veterinario' &&
+                funcionario.cargo !== 'administrador'
+            ) {
+                formEditar.cargo.value = 'outro';
+                if (inputCargoPersonalizadoEditar) inputCargoPersonalizadoEditar.value = funcionario.cargo;
+            }
             modalEditar.showModal();
             verificarCargoEditar();
+            verificarOutroCargoEditar();
 
         } catch (error) {
             alert('Erro ao carregar funcionário: ' + error.message);
@@ -124,7 +153,16 @@ formEditar.addEventListener('submit', async (e) => {
         return;
     }
 
-    const cargoNormalizado = normalizarTexto(formEditar.cargo.value);
+    let cargoFinal = formEditar.cargo.value;
+    if (cargoFinal === 'outro') {
+        cargoFinal = formEditar.cargoPersonalizadoEditar.value.trim();
+        if (!cargoFinal) {
+            alert('Digite o nome do cargo.');
+            return;
+        }
+    }
+
+    const cargoNormalizado = normalizarTexto(cargoFinal);
 
     // Validação extra para veterinário
     if (cargoNormalizado === 'veterinario') {
@@ -137,13 +175,15 @@ formEditar.addEventListener('submit', async (e) => {
     const dadosAtualizados = {
         nome: formEditar.nome.value.trim(),
         cpf: formEditar.cpf.value.trim(),
-        cargo: formEditar.cargo.value,
+        cargo: cargoFinal,
         crmv: cargoNormalizado === 'veterinario' ? formEditar.crmv.value.trim() : '',
         especialidade: cargoNormalizado === 'veterinario' ? formEditar.especialidade.value.trim() : '',
         telefone: formEditar.telefone.value.trim(),
         email: formEditar.email.value.trim(),
         senha: formEditar.senha.value.trim()
     };
+
+    console.log('Enviando para o backend:', dadosAtualizados);
 
     const token = localStorage.getItem('token');
 
@@ -153,6 +193,7 @@ formEditar.addEventListener('submit', async (e) => {
     }
 
     try {
+        
         const resposta = await fetch(`http://localhost:3000/funcionarios/${FuncionarioIdEditar}`, {
             method: 'PUT',
             headers: {
@@ -179,3 +220,4 @@ formEditar.addEventListener('submit', async (e) => {
         alert('Erro na conexão: ' + error.message);
     }
 });
+

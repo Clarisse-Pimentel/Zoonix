@@ -1,3 +1,44 @@
+.form-row select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color : #333;
+  font-family: 'Poppins', sans-serif; 
+  font-size: 14px;                   
+  font-weight: 700;                  
+  appearance: none;                 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+
+.form-row select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='10'%20viewBox='0%200%2014%2010'%3E%3Cpath%20fill='%23333'%20d='M7%2010L0%200h14z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-row input,
+.form-row select {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    font-weight: 700;
+    box-sizing: border-box;
+}
 /* Reset básico */
 * {
     margin: 0;
