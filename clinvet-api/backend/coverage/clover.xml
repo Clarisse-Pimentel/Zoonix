@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750997917635" clover="3.2.0">
-  <project timestamp="1750997917635" name="All files">
-    <metrics statements="297" coveredstatements="58" conditionals="148" coveredconditionals="31" methods="20" coveredmethods="4" elements="465" coveredelements="93" complexity="0" loc="297" ncloc="297" packages="1" files="4" classes="4"/>
+<coverage generated="1751043661319" clover="3.2.0">
+  <project timestamp="1751043661320" name="All files">
+    <metrics statements="297" coveredstatements="78" conditionals="148" coveredconditionals="41" methods="20" coveredmethods="5" elements="465" coveredelements="124" complexity="0" loc="297" ncloc="297" packages="1" files="4" classes="4"/>
     <file name="atendimentosController.js" path="D:\GIT\Zoonix\clinvet-api\backend\controllers\atendimentosController.js">
-      <metrics statements="69" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="5" coveredmethods="0"/>
-      <line num="3" count="0" type="stmt"/>
+      <metrics statements="69" coveredstatements="20" conditionals="30" coveredconditionals="10" methods="5" coveredmethods="1"/>
+      <line num="3" count="1" type="stmt"/>
       <line num="4" count="0" type="stmt"/>
       <line num="5" count="0" type="stmt"/>
       <line num="19" count="0" type="stmt"/>
       <line num="21" count="0" type="stmt"/>
       <line num="22" count="0" type="stmt"/>
-      <line num="27" count="0" type="stmt"/>
-      <line num="28" count="0" type="stmt"/>
-      <line num="30" count="0" type="cond" truecount="0" falsecount="8"/>
-      <line num="31" count="0" type="stmt"/>
-      <line num="34" count="0" type="stmt"/>
-      <line num="36" count="0" type="stmt"/>
-      <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="38" count="0" type="stmt"/>
-      <line num="42" count="0" type="stmt"/>
-      <line num="43" count="0" type="stmt"/>
-      <line num="44" count="0" type="stmt"/>
-      <line num="45" count="0" type="stmt"/>
-      <line num="47" count="0" type="stmt"/>
-      <line num="53" count="0" type="stmt"/>
-      <line num="55" count="0" type="stmt"/>
-      <line num="56" count="0" type="stmt"/>
-      <line num="61" count="0" type="stmt"/>
+      <line num="27" count="1" type="stmt"/>
+      <line num="28" count="4" type="stmt"/>
+      <line num="30" count="4" type="cond" truecount="8" falsecount="0"/>
+      <line num="31" count="1" type="stmt"/>
+      <line num="34" count="3" type="stmt"/>
+      <line num="36" count="3" type="stmt"/>
+      <line num="37" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="1" type="stmt"/>
+      <line num="42" count="1" type="stmt"/>
+      <line num="43" count="1" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="45" count="1" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
+      <line num="53" count="1" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="56" count="1" type="stmt"/>
+      <line num="61" count="1" type="stmt"/>
       <line num="62" count="0" type="stmt"/>
       <line num="63" count="0" type="stmt"/>
       <line num="65" count="0" type="cond" truecount="0" falsecount="8"/>
@@ -43,7 +43,7 @@
       <line num="88" count="0" type="stmt"/>
       <line num="90" count="0" type="stmt"/>
       <line num="91" count="0" type="stmt"/>
-      <line num="96" count="0" type="stmt"/>
+      <line num="96" count="1" type="stmt"/>
       <line num="97" count="0" type="stmt"/>
       <line num="98" count="0" type="stmt"/>
       <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -64,7 +64,7 @@
       <line num="130" count="0" type="stmt"/>
       <line num="132" count="0" type="stmt"/>
       <line num="133" count="0" type="stmt"/>
-      <line num="137" count="0" type="stmt"/>
+      <line num="137" count="1" type="stmt"/>
       <line num="138" count="0" type="stmt"/>
       <line num="140" count="0" type="stmt"/>
       <line num="141" count="0" type="stmt"/>
