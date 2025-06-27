@@ -10,7 +10,6 @@ Este projeto visa desenvolver um sistema web para clínica veterinária, oferece
 - Cadastro, alteração e exclusão de dados referentes aos pacientes, funcionários e consultas;
 - Agendamento de consultas;
 - Geração de uma ficha com as informações dos pacientes;
-- Venda de produtos veterinários.
 
 ## 📌 Regras de Uso do Git
 
@@ -102,7 +101,30 @@ cd Zoonix
    npm install
    node server.js
    ```
-
 4. Acesse o frontend:
    - Abra o arquivo `index.html` no navegador
    - Ou utilize um servidor local como Live Server (VSCode)
+
+## 🧪 Como Rodar os Testes
+
+Para executar os testes unitários, siga os passos:
+
+1. Entre na pasta do backend (caso ainda não esteja):
+
+```bash
+cd backend
+Instale as dependências (se ainda não instalou):
+```
+
+
+Rode os testes com o comando:
+
+```bash
+npm test
+```
+Para gerar o relatório de cobertura, use:
+```bash
+npm run test:coverage
+```
+
+
