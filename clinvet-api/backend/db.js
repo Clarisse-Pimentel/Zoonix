@@ -8,7 +8,7 @@ async function initDatabase() {
     db = await mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: '1357',
+      password: 'Trabalho09.',
       database: 'clinvet',
       multipleStatements: true,
     });

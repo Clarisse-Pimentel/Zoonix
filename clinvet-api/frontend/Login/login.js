@@ -28,6 +28,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     inputCpf.value = cpf;
   });
 
+  inputCpf.addEventListener('blur', () => {
+    const cpf = inputCpf.value.replace(/\D/g, '');
+    if (!/^\d{11}$/.test(cpf)) {
+      inputCpf.classList.add('erro');
+      inputCpf.setAttribute('aria-invalid', 'true');
+    } else {
+      inputCpf.classList.remove('erro');
+      inputCpf.removeAttribute('aria-invalid');
+    }
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
