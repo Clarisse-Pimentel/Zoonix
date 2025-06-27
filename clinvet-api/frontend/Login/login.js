@@ -39,6 +39,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  // Validação visual do campo de senha
+  inputSenha.addEventListener('blur', () => {
+    const senha = inputSenha.value.trim();
+    if (!senha) {
+      inputSenha.classList.add('erro');
+      inputSenha.setAttribute('aria-invalid', 'true');
+    } else {
+      inputSenha.classList.remove('erro');
+      inputSenha.removeAttribute('aria-invalid');
+    }
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
