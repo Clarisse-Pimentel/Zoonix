@@ -7,7 +7,7 @@ import time
 class TesteValidacaoCPF(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Edge()
-        self.driver.get("http://localhost:3000/login.html")
+        self.driver.get("http://localhost:3001/frontend/Login/login.html")
 
     def test_cpf_invalido(self):
         driver = self.driver
