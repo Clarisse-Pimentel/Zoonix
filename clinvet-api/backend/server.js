@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -9,6 +10,7 @@ import funcionariosRoutes from './routes/funcionarios.js';
 import pacientesRoutes from './routes/pacientes.js';
 import loginRoutes from './routes/login.js';
 import loginRoute, { verificarPrimeiroAcesso } from './routes/login.js';
+import agenteRoutes from './routes/agente.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +35,7 @@ app.get('/', (req, res) => {
 app.use('/pacientes', pacientesRoutes);
 app.use('/funcionarios', funcionariosRoutes);
 app.use('/atendimentos', atendimentosRoutes);
+app.use('/api/agente', agenteRoutes);
 app.use('/login', loginRoutes);
 app.get('/verificar-primeiro-acesso', verificarPrimeiroAcesso);
 
